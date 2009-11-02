@@ -1,0 +1,16 @@
+C:\Documents and Settings\USER1\Local Settings\Application Data\Temporary Projects\TFMS_Server\bin\Debug\TFMS_Server.exe
+C:\Documents and Settings\USER1\Local Settings\Application Data\Temporary Projects\TFMS_Server\bin\Debug\TFMS_Server.pdb
+C:\Documents and Settings\USER1\Local Settings\Application Data\Temporary Projects\TFMS_Server\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\USER1\Local Settings\Application Data\Temporary Projects\TFMS_Server\obj\Debug\TFMS_Server.Form1.resources
+C:\Documents and Settings\USER1\Local Settings\Application Data\Temporary Projects\TFMS_Server\obj\Debug\TFMS_Server.Properties.Resources.resources
+C:\Documents and Settings\USER1\Local Settings\Application Data\Temporary Projects\TFMS_Server\obj\Debug\TFMS_Server.csproj.GenerateResource.Cache
+C:\Documents and Settings\USER1\Local Settings\Application Data\Temporary Projects\TFMS_Server\obj\Debug\TFMS_Server.exe
+C:\Documents and Settings\USER1\Local Settings\Application Data\Temporary Projects\TFMS_Server\obj\Debug\TFMS_Server.pdb
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Debug\TFMS_Server.exe
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Debug\TFMS_Server.pdb
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Debug\TFMS_Server.Form1.resources
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Debug\TFMS_Server.Properties.Resources.resources
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Debug\TFMS_Server.csproj.GenerateResource.Cache
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\bin\Debug\TFMS_Server.exe
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\bin\Debug\TFMS_Server.pdb
