@@ -1,9 +1,0 @@
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Client\TFMS_Client\bin\Debug\TFMS_Client.exe
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Client\TFMS_Client\bin\Debug\TFMS_Client.pdb
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Client\TFMS_Client\obj\Debug\ResolveAssemblyReference.cache
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Client\TFMS_Client\obj\Debug\TFMS_Client.Properties.Resources.resources
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Client\TFMS_Client\obj\Debug\TFMS_Client.csproj.GenerateResource.Cache
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Client\TFMS_Client\obj\Debug\TFMS_Client.exe
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Client\TFMS_Client\obj\Debug\TFMS_Client.pdb
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Client\TFMS_Client\obj\Debug\TFMS_Client.frmLogin.resources
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Client\TFMS_Client\obj\Debug\TFMS_Client.frmMain.resources
