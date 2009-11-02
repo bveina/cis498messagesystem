@@ -1,8 +1,0 @@
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Release\ResolveAssemblyReference.cache
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Release\TFMS_Server.Form1.resources
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Release\TFMS_Server.Properties.Resources.resources
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Release\TFMS_Server.csproj.GenerateResource.Cache
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\bin\Release\TFMS_Server.exe
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\bin\Release\TFMS_Server.pdb
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Release\TFMS_Server.exe
-C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\TFMS_Server\TFMS_Server\obj\Release\TFMS_Server.pdb
