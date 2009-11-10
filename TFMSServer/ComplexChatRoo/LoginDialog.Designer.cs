@@ -32,8 +32,8 @@
             this.txtUser = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.txtServer = new System.Windows.Forms.TextBox();
             this.txtPort = new System.Windows.Forms.TextBox();
+            this.txtServer = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -79,14 +79,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Server and port";
             // 
-            // txtServer
-            // 
-            this.txtServer.Location = new System.Drawing.Point(7, 20);
-            this.txtServer.Name = "txtServer";
-            this.txtServer.Size = new System.Drawing.Size(100, 20);
-            this.txtServer.TabIndex = 0;
-            this.txtServer.Text = "127.0.0.1";
-            // 
             // txtPort
             // 
             this.txtPort.Location = new System.Drawing.Point(143, 20);
@@ -95,13 +87,20 @@
             this.txtPort.TabIndex = 1;
             this.txtPort.Text = "1000";
             // 
+            // txtServer
+            // 
+            this.txtServer.Location = new System.Drawing.Point(7, 20);
+            this.txtServer.Name = "txtServer";
+            this.txtServer.Size = new System.Drawing.Size(100, 20);
+            this.txtServer.TabIndex = 0;
+            this.txtServer.Text = "127.0.0.1";
+            // 
             // LoginDialog
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(255, 139);
-            this.ControlBox = false;
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
@@ -110,7 +109,6 @@
             this.MinimizeBox = false;
             this.Name = "LoginDialog";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.Text = "Login";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

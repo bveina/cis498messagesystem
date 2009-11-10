@@ -48,7 +48,10 @@ namespace Console_Server
         }
         static void handleRelayRequest(Data d)
         {
-            Console.WriteLine("{0} has sent \"{1}\"", d.strName, d.strMessage);
+            if (d.strMessage.Length>255)
+                Console.WriteLine("{0} has sent a long message", d.strName );
+            else
+                Console.WriteLine("{0} has sent \"{1}\"", d.strName, d.strMessage);
         }
     }
 }
