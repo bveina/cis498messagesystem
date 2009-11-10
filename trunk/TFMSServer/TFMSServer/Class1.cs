@@ -29,7 +29,7 @@ namespace TFMS_Space
     public class TFMSServer
     {
         // info about connected clients
-        public  const int BUFF_SIZE = 16384;
+        public  const int BUFF_SIZE = 1024;
         public List<ClientInfo> clientList;
         Socket serverSocket; // main socket to listen to;
         byte[] byteData;
@@ -124,7 +124,7 @@ namespace TFMS_Space
                     msgToSend.strMessage = msgReceived.strName;
                     break;
                 case Command.Message:
-                    Console.WriteLine("Received Message from:{0}", getNamefromSocket(clientSocket));
+                    Console.WriteLine("Received Message from:{0} size=({1})", getNamefromSocket(clientSocket),byteData.length);
                     RelayRequested(msgReceived);
                     msgToSend.strMessage = msgReceived.strMessage;
                     break;
@@ -139,8 +139,13 @@ namespace TFMS_Space
 
                     buffSize = int.Parse(msgReceived.strMessage);
                     Console.WriteLine("Received MsgLen:{0} from:{1}", buffSize, getNamefromSocket(clientSocket));
-                    byteData = new byte[buffSize + BUFF_SIZE];
+                    byteData = new byte[buffSize+BUFF_SIZE];
                     break;
+                default:
+                    Console.WriteLine("cant interpret command! aborting relay.");
+                    Console.WriteLine("BeginRecive from :{0}", getNamefromSocket(clientSocket));
+                    clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
+                    return;
             }
 
             //broadcast messages if needed
@@ -149,9 +154,10 @@ namespace TFMS_Space
                 foreach (ClientInfo c in clientList)
                 {
                     //if (c.socket != clientSocket) //dont send to yourself
-                    Console.WriteLine("relaying {1} to {0}", c.strName, msgToSend.cmdCommand.ToString());
-
+                    //{
+                    Console.WriteLine("relaying {0} from {1} to {2}", msgToSend.cmdCommand, msgToSend.strName, c.strName);
                     sendTFMSmsg(msgToSend, c.socket, new AsyncCallback(OnSend));
+                    //}
                 }
             }
             if (msgReceived.cmdCommand != Command.Logout)
@@ -170,9 +176,9 @@ namespace TFMS_Space
         public IAsyncResult sendTFMSmsg(Data d, Socket s, AsyncCallback snd)
         {
             byte[] message = d.ToByte();
-            //Console.WriteLine("sending length: {0}",message.Length);
-            //s.Send(new Data(Command.MsgLen, string.Format("{0}",message.Length), d.strName).ToByte());
-            //Console.WriteLine("BeginSend:{0}-{1}",d.cmdCommand,d.strMessage );
+            Console.WriteLine("sending length: {0}",message.Length);
+            s.Send(new Data(Command.MsgLen, string.Format("{0}",message.Length), d.strName).ToByte());
+            Console.WriteLine("BeginSend:{0} msg",d.cmdCommand);
             return s.BeginSend(message, 0, message.Length, SocketFlags.None, snd, s);
         }
         #endregion
@@ -209,7 +215,7 @@ namespace TFMS_Space
     }
     public class TFMSClient
     {
-        public const int BUFF_SIZE = 16384;
+        public const int BUFF_SIZE = 1024;
         public int serverPort;
         public Socket clientSocket;
         public string strName;
@@ -278,8 +284,8 @@ namespace TFMS_Space
         {
             Data msgToSend = new Data(Command.List,null,strName);
             byte[] data = msgToSend.ToByte();
-            //Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", data.Length), strName);
-            //clientSocket.Send(lenToSend.ToByte());
+            Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", data.Length), strName);
+            clientSocket.Send(lenToSend.ToByte());
             clientSocket.BeginSend(data,0,data.Length,SocketFlags.None,new AsyncCallback(OnSend),null);
         }
 
@@ -287,8 +293,8 @@ namespace TFMS_Space
         {
             Data msgToSend = new Data(Command.Message, data, strName);
             byte[] d = msgToSend.ToByte();
-            //Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", d.Length), strName);
-            //clientSocket.Send(lenToSend.ToByte());
+            Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", d.Length), strName);
+            clientSocket.Send(lenToSend.ToByte());
             clientSocket.BeginSend(d, 0, d.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
         }
         #endregion
@@ -338,7 +344,7 @@ namespace TFMS_Space
                         break;
                 }
 
-                byteData = new byte[bufSize + BUFF_SIZE];
+                byteData = new byte[bufSize+BUFF_SIZE];
 
                 clientSocket.BeginReceive(byteData,
                                           0,
@@ -376,6 +382,11 @@ namespace TFMS_Space
         {
             //The first four bytes are for the Command
             this.cmdCommand = (Command)BitConverter.ToInt32(data, 0);
+            if (Enum.GetName(typeof(Command), this.cmdCommand) == null)
+            {
+                Console.WriteLine("bad command...");
+                return;
+            }
 
             //The next four store the length of the name
             int nameLen = BitConverter.ToInt32(data, 4);

@@ -29,20 +29,28 @@ namespace ComplexChatRoo
         private void Form1_Load(object sender, EventArgs e)
         {
             LoginDialog login = new LoginDialog();
+            DialogResult r;
             do
             {
-                if (login.ShowDialog() == DialogResult.OK)
+                r = login.ShowDialog();
+                if (r == DialogResult.OK)
                 {
                     name = login.name;
                     serverAddress = login.serverAddr;
                     serverPort = int.Parse(login.serverPort);
+                    myClient = new TFMSClient(serverPort, name);
+                    myClient.loginReceived += new MessageRecieved(handleLogon);
+                    myClient.logoffReceived += new MessageRecieved(handleLogoff);
+                    myClient.listReceived += new MessageRecieved(handleList);
+                    myClient.dataReceived += new MessageRecieved(handleMessage);
                 }
-                myClient = new TFMSClient(serverPort, name);
-                myClient.loginReceived += new MessageRecieved(handleLogon);
-                myClient.logoffReceived += new MessageRecieved(handleLogoff);
-                myClient.listReceived += new MessageRecieved(handleList);
-                myClient.dataReceived += new MessageRecieved(handleMessage);
-            } while (!myClient.connect(serverAddress));
+                else if (r == DialogResult.Cancel)
+                {
+                    this.Close();
+                    return;
+                }
+                
+            } while (myClient==null || !myClient.connect(serverAddress));
             myClient.getList();
         }
 
@@ -84,7 +92,8 @@ namespace ComplexChatRoo
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            myClient.disconnect();
+            if (myClient!=null)
+                myClient.disconnect();
         }
 
         private void lstMessages_SelectedIndexChanged(object sender, EventArgs e)
