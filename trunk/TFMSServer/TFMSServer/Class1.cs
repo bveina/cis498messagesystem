@@ -76,116 +76,96 @@ namespace TFMS_Space
         #region async methods
         private void OnAccept(IAsyncResult ar)
         {
-            try
-            {
-                //get the socket the client and server are comunicating through
-                Socket clientSocket = serverSocket.EndAccept(ar);
+            //get the socket the client and server are comunicating through
+            Socket clientSocket = serverSocket.EndAccept(ar);
 
-                // start listening for other clients
-                serverSocket.BeginAccept(new AsyncCallback(OnAccept), null);
+            // start listening for other clients
+            serverSocket.BeginAccept(new AsyncCallback(OnAccept), null);
 
-                //setup the async receive
-                Console.WriteLine("Begin Recieve:");
-                clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None,
-                     new AsyncCallback(OnReceive), clientSocket);
-            }
-            catch (Exception ex)
-            {
-
-            }
+            //setup the async receive
+            Console.WriteLine("Begin Recieve:");
+            clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None,
+                         new AsyncCallback(OnReceive), clientSocket);
         }
         private void OnReceive(IAsyncResult ar)
         {
             int buffSize = BUFF_SIZE;
-            try
+            Socket clientSocket = (Socket)ar.AsyncState;
+            Console.WriteLine("End Receive from:{0}", getNamefromSocket(clientSocket));
+            clientSocket.EndReceive(ar);
+            Data msgReceived = new Data(byteData);
+
+            Data msgToSend = new Data();
+
+
+            msgToSend.cmdCommand = msgReceived.cmdCommand;
+            msgToSend.strName = msgReceived.strName;
+
+            switch (msgReceived.cmdCommand)
             {
-                Socket clientSocket = (Socket)ar.AsyncState;
-                Console.WriteLine("End Receive from:{0}",getNamefromSocket(clientSocket));
-                clientSocket.EndReceive(ar);
-                Data msgReceived = new Data(byteData);
+                //When a user logs in to the server then we add her to our list of clients
+                case Command.Login:
+                    logonRequested(msgReceived);
+                    ClientInfo clientInfo = new ClientInfo(clientSocket, msgReceived.strName);
+                    clientList.Add(clientInfo);
+                    Console.WriteLine("received login from:{0}", getNamefromSocket(clientSocket));
+                    //just pass the name to other clients for now
+                    // let the client program handle how to deal with it.
+                    msgToSend.strMessage = msgReceived.strName;
+                    break;
+                case Command.Logout:
+                    Console.WriteLine("Received Logout from:{0}", getNamefromSocket(clientSocket));
+                    logoffRequested(msgReceived);
+                    //find the index of the client whose socket we are provided
+                    clientList.RemoveAt(findIndexFromClient(clientList, clientSocket));
+                    //clientSocket.EndReceive(ar);
+                    //Console.WriteLine("EndReceive:");
+                    clientSocket.Close();
+                    msgToSend.strMessage = msgReceived.strName;
+                    break;
+                case Command.Message:
+                    Console.WriteLine("Received Message from:{0}", getNamefromSocket(clientSocket));
+                    RelayRequested(msgReceived);
+                    msgToSend.strMessage = msgReceived.strMessage;
+                    break;
+                case Command.List:
+                    Console.WriteLine("Receved List Rqfrom:{0}", getNamefromSocket(clientSocket));
+                    ListRequested(msgReceived);
+                    msgToSend = GetClientListMessage();
+                    //send to a single person
+                    sendTFMSmsg(msgToSend, clientSocket, new AsyncCallback(OnSend));
+                    break;
+                case Command.MsgLen:
 
-                Data msgToSend = new Data();
-                
+                    buffSize = int.Parse(msgReceived.strMessage);
+                    Console.WriteLine("Received MsgLen:{0} from:{1}", buffSize, getNamefromSocket(clientSocket));
+                    byteData = new byte[buffSize + BUFF_SIZE];
+                    break;
+            }
 
-                msgToSend.cmdCommand = msgReceived.cmdCommand;
-                msgToSend.strName = msgReceived.strName;
-
-                switch (msgReceived.cmdCommand)
+            //broadcast messages if needed
+            if (msgToSend.cmdCommand != Command.List && msgToSend.cmdCommand != Command.MsgLen)
+            {
+                foreach (ClientInfo c in clientList)
                 {
-                    //When a user logs in to the server then we add her to our list of clients
-                    case Command.Login:
-                        logonRequested(msgReceived);
-                        ClientInfo clientInfo = new ClientInfo(clientSocket, msgReceived.strName);
-                        clientList.Add(clientInfo);
-                        Console.WriteLine("received login from:{0}", getNamefromSocket(clientSocket));
-                        //just pass the name to other clients for now
-                        // let the client program handle how to deal with it.
-                        msgToSend.strMessage = msgReceived.strName;
-                        break;
-                    case Command.Logout:
-                        Console.WriteLine("Received Logout from:{0}", getNamefromSocket(clientSocket));
-                        logoffRequested(msgReceived);
-                        //find the index of the client whose socket we are provided
-                        clientList.RemoveAt(findIndexFromClient(clientList,clientSocket));
-                        //clientSocket.EndReceive(ar);
-                        //Console.WriteLine("EndReceive:");
-                        clientSocket.Close();
-                        msgToSend.strMessage = msgReceived.strName;
-                        break;
-                    case Command.Message:
-                        Console.WriteLine("Received Message from:{0}",getNamefromSocket(clientSocket));
-                        RelayRequested(msgReceived);
-                        msgToSend.strMessage = msgReceived.strMessage;
-                        break;
-                    case Command.List:
-                        Console.WriteLine("Receved List Rqfrom:{0}",getNamefromSocket(clientSocket));
-                        ListRequested(msgReceived);
-                        msgToSend = GetClientListMessage();
-                        //send to a single person
-                        sendTFMSmsg(msgToSend, clientSocket,new AsyncCallback(OnSend));
-                        break;
-                    case Command.MsgLen:
-                        
-                        buffSize = int.Parse(msgReceived.strMessage);
-                        Console.WriteLine("Received MsgLen:{0} from:{1}", buffSize, getNamefromSocket(clientSocket));
-                        byteData = new byte[buffSize + BUFF_SIZE];
-                        break;
-                }
+                    //if (c.socket != clientSocket) //dont send to yourself
+                    Console.WriteLine("relaying {1} to {0}", c.strName, msgToSend.cmdCommand.ToString());
 
-                //broadcast messages if needed
-                if (msgToSend.cmdCommand != Command.List && msgToSend.cmdCommand!=Command.MsgLen)
-                {
-                    foreach (ClientInfo c in clientList)
-                    {
-                        //if (c.socket != clientSocket) //dont send to yourself
-                        Console.WriteLine("relaying {1} to {0}", c.strName, msgToSend.cmdCommand.ToString());
-
-                        sendTFMSmsg(msgToSend, c.socket, new AsyncCallback(OnSend));
-                    }
-                }
-                if (msgReceived.cmdCommand != Command.Logout)
-                {
-                    Console.WriteLine("BeginRecive from :{0}",getNamefromSocket(clientSocket));
-                    clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
+                    sendTFMSmsg(msgToSend, c.socket, new AsyncCallback(OnSend));
                 }
             }
-            catch (Exception ex)
+            if (msgReceived.cmdCommand != Command.Logout)
             {
-
+                Console.WriteLine("BeginRecive from :{0}", getNamefromSocket(clientSocket));
+                clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
             }
+
         }
         public void OnSend(IAsyncResult ar)
         {
-            try
-            {
-                Socket client = (Socket)ar.AsyncState;
-                client.EndSend(ar);
-                //Console.WriteLine("EndSend:{0}", client);
-            }
-            catch (Exception ex)
-            {
-                
-            }
+            Socket client = (Socket)ar.AsyncState;
+            client.EndSend(ar);
+            //Console.WriteLine("EndSend:{0}", client);
         }
         public IAsyncResult sendTFMSmsg(Data d, Socket s, AsyncCallback snd)
         {
@@ -287,16 +267,11 @@ namespace TFMS_Space
 
         public void disconnect()
         {
-            try
-            {
-                Data msgToSend = new Data(Command.Logout, null, strName);
-                byte[] data = msgToSend.ToByte();
-                //Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", data.Length), strName);
-                //clientSocket.Send(lenToSend.ToByte());
-                clientSocket.Send(data);
-            }
-            catch (Exception ex)
-            { }
+            Data msgToSend = new Data(Command.Logout, null, strName);
+            byte[] data = msgToSend.ToByte();
+            //Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", data.Length), strName);
+            //clientSocket.Send(lenToSend.ToByte());
+            clientSocket.Send(data);
         }
 
         public void getList()
@@ -326,9 +301,9 @@ namespace TFMS_Space
                 clientSocket.EndSend(ar);
             }
             catch (ObjectDisposedException)
-            { }
-            catch (Exception ex)
-            {}
+            {
+                Console.WriteLine("this object has been disposed.");
+            }
         }
 
         private void OnReceive(IAsyncResult ar)
@@ -374,11 +349,10 @@ namespace TFMS_Space
 
             }
             catch (ObjectDisposedException)
-            { }
-            catch (Exception ex)
             {
-                
+                Console.WriteLine("this object has been disposed");
             }
+            
         }
         #endregion
     }
