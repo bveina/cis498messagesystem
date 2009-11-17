@@ -88,6 +88,7 @@ namespace ComplexChatRoo
         private void cmdSend_Click(object sender, EventArgs e)
         {
             myClient.sendMessage(drawingBox31.serialize());
+            drawingBox31.Clear();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -99,7 +100,10 @@ namespace ComplexChatRoo
         private void lstMessages_SelectedIndexChanged(object sender, EventArgs e)
         {
             #region (an attempt to use the path data)
+            
             if (lstMessages.SelectedItem == null) return;
+            try
+            {
             List<DrawingBox.PathData> myPaths;
             string mystr = (string)lstMessages.SelectedItem;
             string[] items = mystr.Split(',');
@@ -109,35 +113,28 @@ namespace ComplexChatRoo
             myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
             ms.Close();
 
-            int w = pictureBox1.ClientRectangle.Width;
-            int h = pictureBox1.ClientRectangle.Height;
-            Bitmap temp = new Bitmap(w,h);
-            Graphics g = Graphics.FromImage(temp);
-            PointF[] newRect={new PointF(0,0),new PointF(w,0),
-                              new PointF(0,h),new PointF(w,h)};
-            Rectangle srcRect= new Rectangle(0,0,int.Parse(items[0]),int.Parse(items[1]));
-            GraphicsPath gp;
-            foreach (DrawingBox.PathData pd in myPaths)
+            vectorBox1.SuspendLayout();
+            vectorBox1.pathWidth = int.Parse(items[0]);
+            vectorBox1.pathHeight = int.Parse(items[1]);
+            vectorBox1.Paths = myPaths;
+            vectorBox1.Invalidate();
+            vectorBox1.ResumeLayout();
+                }
+            catch (Exception ex)
             {
-                if (pd.path == null) continue;
-                Pen p = new Pen(pd.pathColor, pd.pathWidth);
-                pd.path.Warp(newRect, srcRect);
-                g.DrawPath(p,pd.path);
-                p.Dispose();
+                MessageBox.Show(ex.Message,"there was an error displaying the image");
             }
-            pictureBox1.Image  = temp;
-            
             #endregion
-            /*
-             * 
-             * string msg = (string)lstMessages.SelectedItem;
-            string[] objs = msg.Split('*');
-            string hash = objs[2];
-            MemoryStream ms = new MemoryStream(Convert.FromBase64String(hash));
-            Bitmap temp = new Bitmap(ms);
-            
-            pictureBox1.Image = temp;
-             */
+        }
+
+        private void drawingBox31_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void vectorBox1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
