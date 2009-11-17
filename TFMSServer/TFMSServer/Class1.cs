@@ -374,7 +374,7 @@ namespace TFMS_Space
 
         public Data(Command c,string msg,string name)
         {
-            cmdCommand=c;strMessage=msg;strName=name;
+            cmdCommand = c; strMessage = msg; strName = name; acknowledged = false;
         }
 
         //Converts the bytes into an object of type Data
@@ -405,6 +405,7 @@ namespace TFMS_Space
                 this.strMessage = Encoding.UTF8.GetString(data, 12 + nameLen, msgLen);
             else
                 this.strMessage = null;
+            acknowledged = false;
         }
 
         //Converts the Data structure into an array of bytes
@@ -441,6 +442,7 @@ namespace TFMS_Space
         public string strName;      //Name by which the client logs into the room
         public string strMessage;   //Message text
         public Command cmdCommand;  //Command type (login, logout, send message, etcetera)
+        public bool acknowledged;
     }
 
     //The commands for interaction between the server and the client
