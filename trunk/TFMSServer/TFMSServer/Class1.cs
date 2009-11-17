@@ -124,7 +124,7 @@ namespace TFMS_Space
                     msgToSend.strMessage = msgReceived.strName;
                     break;
                 case Command.Message:
-                    Console.WriteLine("Received Message from:{0} size=({1})", getNamefromSocket(clientSocket),byteData.length);
+                    Console.WriteLine("Received Message from:{0} size=({1})", getNamefromSocket(clientSocket),byteData.Length);
                     RelayRequested(msgReceived);
                     msgToSend.strMessage = msgReceived.strMessage;
                     break;

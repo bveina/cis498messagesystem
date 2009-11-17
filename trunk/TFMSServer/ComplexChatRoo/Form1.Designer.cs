@@ -34,12 +34,12 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.cmdSend = new System.Windows.Forms.Button();
+            this.drawingBox31 = new DrawingBox.DrawingBox3();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.vectorBox1 = new DrawingBox.vectorBox();
             this.lstMessages = new System.Windows.Forms.ListBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.drawingBox31 = new DrawingBox.DrawingBox3();
             this.tabPages.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -47,7 +47,6 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabPages
@@ -103,6 +102,21 @@
             this.cmdSend.UseVisualStyleBackColor = true;
             this.cmdSend.Click += new System.EventHandler(this.cmdSend_Click);
             // 
+            // drawingBox31
+            // 
+            this.drawingBox31.BackColor = System.Drawing.SystemColors.Control;
+            this.drawingBox31.BackgroundImage = global::ComplexChatRoo.Properties.Resources.heavycruiser_enterprise_up1;
+            this.drawingBox31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.drawingBox31.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.drawingBox31.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.drawingBox31.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.drawingBox31.lineColor = System.Drawing.Color.Black;
+            this.drawingBox31.lineWidth = 1;
+            this.drawingBox31.Location = new System.Drawing.Point(3, 3);
+            this.drawingBox31.Name = "drawingBox31";
+            this.drawingBox31.Size = new System.Drawing.Size(547, 358);
+            this.drawingBox31.TabIndex = 1;
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.splitContainer1);
@@ -122,7 +136,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.pictureBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.vectorBox1);
             // 
             // splitContainer1.Panel2
             // 
@@ -131,17 +145,22 @@
             this.splitContainer1.SplitterDistance = 431;
             this.splitContainer1.TabIndex = 0;
             // 
-            // pictureBox1
+            // vectorBox1
             // 
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(431, 419);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.vectorBox1.BackColor = System.Drawing.Color.Transparent;
+            this.vectorBox1.BackgroundImage = global::ComplexChatRoo.Properties.Resources.heavycruiser_enterprise_up1;
+            this.vectorBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.vectorBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.vectorBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.vectorBox1.Location = new System.Drawing.Point(0, 0);
+            this.vectorBox1.Name = "vectorBox1";
+            this.vectorBox1.pathBounds = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.vectorBox1.pathHeight = 0;
+            this.vectorBox1.Paths = null;
+            this.vectorBox1.pathWidth = 0;
+            this.vectorBox1.Size = new System.Drawing.Size(431, 419);
+            this.vectorBox1.TabIndex = 0;
+            this.vectorBox1.Load += new System.EventHandler(this.vectorBox1_Load);
             // 
             // lstMessages
             // 
@@ -158,21 +177,6 @@
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = " ";
             this.notifyIcon1.Visible = true;
-            // 
-            // drawingBox31
-            // 
-            this.drawingBox31.BackColor = System.Drawing.SystemColors.Control;
-            this.drawingBox31.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("drawingBox31.BackgroundImage")));
-            this.drawingBox31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.drawingBox31.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.drawingBox31.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.drawingBox31.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.drawingBox31.lineColor = System.Drawing.Color.Black;
-            this.drawingBox31.lineWidth = 1;
-            this.drawingBox31.Location = new System.Drawing.Point(3, 3);
-            this.drawingBox31.Name = "drawingBox31";
-            this.drawingBox31.Size = new System.Drawing.Size(547, 358);
-            this.drawingBox31.TabIndex = 1;
             // 
             // Form1
             // 
@@ -191,7 +195,6 @@
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -205,9 +208,9 @@
         private System.Windows.Forms.Button cmdSend;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox lstMessages;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private DrawingBox.DrawingBox3 drawingBox31;
+        private DrawingBox.vectorBox vectorBox1;
     }
 }
 

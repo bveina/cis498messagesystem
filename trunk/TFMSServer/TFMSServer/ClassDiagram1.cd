@@ -17,7 +17,7 @@
   <Class Name="TFMS_Space.TFMSServer">
     <Position X="2.25" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAJBCAAQAABAADCAIAABACAAAAAAIAQAAAAAAgA=</HashCode>
+      <HashCode>AAAAAAJBCAAQAABAADCAIAABACAAAAAgIAQAAgAAAgA=</HashCode>
       <FileName>Class1.cs</FileName>
     </TypeIdentifier>
   </Class>
