@@ -100,6 +100,7 @@ namespace TFMS_Space
         }
         private void OnReceive(IAsyncResult ar)
         {
+            while (!ar.IsCompleted) Thread.Sleep(100);
             long buffSize = TFMSConsts.buffSize;
             Socket clientSocket = (Socket)ar.AsyncState;
             Console.WriteLine("End Receive from:{0}", getNamefromSocket(clientSocket));
@@ -125,6 +126,8 @@ namespace TFMS_Space
                     //just pass the name to other clients for now
                     // let the client program handle how to deal with it.
                     msgToSend.strMessage = msgReceived.strName;
+                    buffSize = TFMSConsts.buffSize;
+                    byteData = new byte[buffSize];
                     break;
                 case Command.Logout:
                     Console.WriteLine("Received Logout from:{0}", getNamefromSocket(clientSocket));
@@ -136,21 +139,23 @@ namespace TFMS_Space
                     clientSocket.Close();
                     msgToSend.strMessage = msgReceived.strName;
                     break;
-                case Command.Message:
-                    Console.WriteLine("Received Message from:{0} size=({1})", getNamefromSocket(clientSocket),byteData.Length);
-                    RelayRequested(msgReceived);
-                    msgToSend.strMessage = msgReceived.strMessage;
-                    break;
+                
                 case Command.List:
                     Console.WriteLine("Receved List Rqfrom:{0}", getNamefromSocket(clientSocket));
                     ListRequested(msgReceived);
                     msgToSend = GetClientListMessage();
                     //send to a single person
                     sendTFMSmsg(msgToSend, clientSocket, new AsyncCallback(OnSend));
+                    buffSize = TFMSConsts.buffSize;
+                    break;
+                case Command.Message:
+                    Console.WriteLine("Received Message from:{0} size=({1})", getNamefromSocket(clientSocket), byteData.Length);
+                    RelayRequested(msgReceived);
+                    msgToSend.strMessage = msgReceived.strMessage;
                     break;
                 case Command.MsgLen:
 
-                    buffSize = int.Parse(msgReceived.strMessage);
+                    buffSize = int.Parse(msgReceived.strMessage)+TFMSConsts.buffSize;
                     Console.WriteLine("Received MsgLen:{0} from:{1}", buffSize, getNamefromSocket(clientSocket));
                     byteData = new byte[buffSize];
                     break;
@@ -177,7 +182,7 @@ namespace TFMS_Space
             // unless the message was "peace out!"
             if (msgReceived.cmdCommand != Command.Logout)
             {
-                Console.WriteLine("BeginRecive from :{0}", getNamefromSocket(clientSocket));
+                Console.WriteLine("BeginRecive from :{0} receiveLen={1}", getNamefromSocket(clientSocket),byteData.Length);
                 clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
             }
 
@@ -191,12 +196,12 @@ namespace TFMS_Space
         public IAsyncResult sendTFMSmsg(Data d, Socket s, AsyncCallback snd)
         {
             byte[] message = d.ToByte();
-            if (message.Length >= TFMSConsts.buffSize)
-            {
+            //if (message.Length >= TFMSConsts.buffSize)
+            //{
                 Console.WriteLine("sending length: {0}", message.Length);
                 s.Send(new Data(Command.MsgLen, string.Format("{0}", message.Length), d.strName).ToByte());
                 Thread.Sleep(TFMSConsts.delayTime);
-            }
+            //}
             Console.WriteLine("BeginSend:{0} msg",d.cmdCommand);
             return s.BeginSend(message, 0, message.Length, SocketFlags.None, snd, s);
         }
@@ -305,13 +310,13 @@ namespace TFMS_Space
         {
             Data msgToSend = new Data(Command.List,null,strName);
             byte[] data = msgToSend.ToByte();
-            if (data.Length >= TFMSConsts.buffSize)
-            {
+            //if (data.Length >= TFMSConsts.buffSize)
+            //{
                 Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", data.Length), strName);
                 lastMessage= lenToSend.ToString();
                 clientSocket.Send(lenToSend.ToByte());
                 Thread.Sleep(TFMSConsts.delayTime );
-            }
+            //}
             lastMessage= msgToSend.ToString();
             clientSocket.BeginSend(data,0,data.Length,SocketFlags.None,new AsyncCallback(OnSend),null);
         }
@@ -321,13 +326,13 @@ namespace TFMS_Space
             Data msgToSend = new Data(Command.Message, data, strName);
             byte[] d = msgToSend.ToByte();
             lastMessage=msgToSend.ToString();
-            if (d.Length >= TFMSConsts.buffSize)
-            {
+            //if (d.Length >= TFMSConsts.buffSize)
+            //{
                 Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", d.Length), strName);
                 lastMessage= lenToSend.ToString();
                 clientSocket.Send(lenToSend.ToByte());
                 Thread.Sleep(TFMSConsts.delayTime);
-            }
+            //}
             lastMessage= msgToSend.ToString();
             clientSocket.BeginSend(d, 0, d.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
         }
@@ -379,7 +384,7 @@ namespace TFMS_Space
                         break;
                 }
 
-                byteData = new byte[bufSize];
+                byteData = new byte[bufSize+TFMSConsts.buffSize];
 
                 clientSocket.BeginReceive(byteData,
                                           0,

@@ -143,25 +143,36 @@ namespace ComplexChatRoo
 
         private void lstMessages_DrawItem(object sender, DrawItemEventArgs e)
         {
-
-            // Draw the background of the ListBox control for each item.
-            e.DrawBackground();
-            // Define the default color of the brush as black.
-            Brush myBrush = Brushes.Black;
-
-            // Determine the color of the brush to draw each item based 
-            // on the index of the item to draw.
-            myBrush = ((Data)lstMessages.Items[e.Index]).dispColor;
-            
-            e.Graphics.FillRectangle(myBrush, e.Bounds);
-            // Draw the current item text based on the current Font 
-            // and the custom brush settings.
             Data tmp = (Data)lstMessages.Items[e.Index];
             string dispString = string.Format("{0} - {1}", tmp.strName, tmp.timeStamp);
-            e.Graphics.DrawString(dispString,
-                e.Font,Brushes.Black , e.Bounds, StringFormat.GenericDefault);
+
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
+                // Draw the background of the ListBox control for each item.
+                e.DrawBackground();
+                e.Graphics.DrawString(dispString,
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+            }
+            else
+            {
+                // Define the default color of the brush as black.
+                Brush myBrush = Brushes.Black;
+
+                // Determine the color of the brush to draw each item based 
+                // on the index of the item to draw.
+                myBrush = ((Data)lstMessages.Items[e.Index]).dispColor;
+
+                e.Graphics.FillRectangle(myBrush, e.Bounds);
+                // Draw the current item text based on the current Font 
+                // and the custom brush settings.
+                
+                e.Graphics.DrawString(dispString,
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+
+            }
             // If the ListBox has focus, draw a focus rectangle around the selected item.
             e.DrawFocusRectangle();
+            
 
         }
     }
