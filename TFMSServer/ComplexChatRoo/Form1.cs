@@ -51,7 +51,7 @@ namespace ComplexChatRoo
                 }
 
             } while (myClient == null || !myClient.connect(serverAddress));
-            myClient.getList();
+            //myClient.getList();
         }
 
 
@@ -151,19 +151,14 @@ namespace ComplexChatRoo
 
             // Determine the color of the brush to draw each item based 
             // on the index of the item to draw.
-            if (((Data)lstMessages.Items[e.Index]).acknowledged)
-            {
-                myBrush = Brushes.Green;
-            }
-            else
-            {
-                myBrush=Brushes.Red;
-            }
-
+            myBrush = ((Data)lstMessages.Items[e.Index]).dispColor;
+            
             e.Graphics.FillRectangle(myBrush, e.Bounds);
             // Draw the current item text based on the current Font 
             // and the custom brush settings.
-            e.Graphics.DrawString(((Data)lstMessages.Items[e.Index]).strName,
+            Data tmp = (Data)lstMessages.Items[e.Index];
+            string dispString = string.Format("{0} - {1}", tmp.strName, tmp.timeStamp);
+            e.Graphics.DrawString(dispString,
                 e.Font,Brushes.Black , e.Bounds, StringFormat.GenericDefault);
             // If the ListBox has focus, draw a focus rectangle around the selected item.
             e.DrawFocusRectangle();

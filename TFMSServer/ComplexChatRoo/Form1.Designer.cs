@@ -173,9 +173,10 @@
             this.lstMessages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstMessages.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.lstMessages.FormattingEnabled = true;
+            this.lstMessages.IntegralHeight = false;
             this.lstMessages.Location = new System.Drawing.Point(0, 0);
             this.lstMessages.Name = "lstMessages";
-            this.lstMessages.Size = new System.Drawing.Size(118, 407);
+            this.lstMessages.Size = new System.Drawing.Size(118, 419);
             this.lstMessages.TabIndex = 0;
             this.lstMessages.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstMessages_DrawItem);
             this.lstMessages.SelectedIndexChanged += new System.EventHandler(this.lstMessages_SelectedIndexChanged);
