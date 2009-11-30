@@ -5,6 +5,11 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Collections;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
+using System.Drawing;
+using System.Threading;
 
 /*/
  * credit to:A Chat Application Using Asynchronous TCP Sockets by Hitesh Sharma for orignal implementation
@@ -14,6 +19,11 @@ using System.Collections;
 
 namespace TFMS_Space
 {
+    public class TFMSConsts
+    {
+        public const int delayTime = 100;
+        public const long buffSize = 1024;
+    }
     public delegate void MessageRecieved(Data dataReceived);
     public struct ClientInfo
     {
@@ -29,7 +39,8 @@ namespace TFMS_Space
     public class TFMSServer
     {
         // info about connected clients
-        public  const int BUFF_SIZE = 1024;
+        
+        
         public List<ClientInfo> clientList;
         Socket serverSocket; // main socket to listen to;
         byte[] byteData;
@@ -48,7 +59,7 @@ namespace TFMS_Space
         public TFMSServer(int port)
         {
             listenPort = port;
-            byteData = new byte[BUFF_SIZE];
+            byteData = new byte[TFMSConsts.buffSize];
             clientList = new List<ClientInfo>();
         }
         #endregion
@@ -89,11 +100,13 @@ namespace TFMS_Space
         }
         private void OnReceive(IAsyncResult ar)
         {
-            int buffSize = BUFF_SIZE;
+            long buffSize = TFMSConsts.buffSize;
             Socket clientSocket = (Socket)ar.AsyncState;
             Console.WriteLine("End Receive from:{0}", getNamefromSocket(clientSocket));
-            clientSocket.EndReceive(ar);
-            Data msgReceived = new Data(byteData);
+            int numBytesReceived = clientSocket.EndReceive(ar);
+            byte [] temp= new byte[numBytesReceived];
+            Array.Copy(byteData, temp, numBytesReceived);
+            Data msgReceived = new Data(temp);
 
             Data msgToSend = new Data();
 
@@ -139,7 +152,7 @@ namespace TFMS_Space
 
                     buffSize = int.Parse(msgReceived.strMessage);
                     Console.WriteLine("Received MsgLen:{0} from:{1}", buffSize, getNamefromSocket(clientSocket));
-                    byteData = new byte[buffSize+BUFF_SIZE];
+                    byteData = new byte[buffSize];
                     break;
                 default:
                     Console.WriteLine("cant interpret command! aborting relay.");
@@ -160,6 +173,8 @@ namespace TFMS_Space
                     //}
                 }
             }
+            //after dealing with the message we need to keep listening
+            // unless the message was "peace out!"
             if (msgReceived.cmdCommand != Command.Logout)
             {
                 Console.WriteLine("BeginRecive from :{0}", getNamefromSocket(clientSocket));
@@ -176,8 +191,12 @@ namespace TFMS_Space
         public IAsyncResult sendTFMSmsg(Data d, Socket s, AsyncCallback snd)
         {
             byte[] message = d.ToByte();
-            Console.WriteLine("sending length: {0}",message.Length);
-            s.Send(new Data(Command.MsgLen, string.Format("{0}",message.Length), d.strName).ToByte());
+            if (message.Length >= TFMSConsts.buffSize)
+            {
+                Console.WriteLine("sending length: {0}", message.Length);
+                s.Send(new Data(Command.MsgLen, string.Format("{0}", message.Length), d.strName).ToByte());
+                Thread.Sleep(TFMSConsts.delayTime);
+            }
             Console.WriteLine("BeginSend:{0} msg",d.cmdCommand);
             return s.BeginSend(message, 0, message.Length, SocketFlags.None, snd, s);
         }
@@ -215,10 +234,10 @@ namespace TFMS_Space
     }
     public class TFMSClient
     {
-        public const int BUFF_SIZE = 1024;
         public int serverPort;
         public Socket clientSocket;
         public string strName;
+        public string lastMessage;
         byte[] byteData;
 
         #region event delegates
@@ -237,7 +256,7 @@ namespace TFMS_Space
             serverPort = port;
             clientSocket = null;
             strName = Name;
-            byteData = new byte[BUFF_SIZE];
+            byteData = new byte[TFMSConsts.buffSize];
         }
         #endregion
 
@@ -253,9 +272,10 @@ namespace TFMS_Space
                 
                 clientSocket.Connect(ipEnd);
                 Data msgToSend = new Data(Command.Login, null, strName);
+                lastMessage= msgToSend.ToString();
                 clientSocket.Send(msgToSend.ToByte());
 
-                byteData = new byte[BUFF_SIZE];
+                byteData = new byte[TFMSConsts.buffSize];
                 //Start listening to the data asynchronously
                 clientSocket.BeginReceive(byteData,
                                        0, 
@@ -275,6 +295,7 @@ namespace TFMS_Space
         {
             Data msgToSend = new Data(Command.Logout, null, strName);
             byte[] data = msgToSend.ToByte();
+            lastMessage= msgToSend.ToString();
             //Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", data.Length), strName);
             //clientSocket.Send(lenToSend.ToByte());
             clientSocket.Send(data);
@@ -284,8 +305,14 @@ namespace TFMS_Space
         {
             Data msgToSend = new Data(Command.List,null,strName);
             byte[] data = msgToSend.ToByte();
-            Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", data.Length), strName);
-            clientSocket.Send(lenToSend.ToByte());
+            if (data.Length >= TFMSConsts.buffSize)
+            {
+                Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", data.Length), strName);
+                lastMessage= lenToSend.ToString();
+                clientSocket.Send(lenToSend.ToByte());
+                Thread.Sleep(TFMSConsts.delayTime );
+            }
+            lastMessage= msgToSend.ToString();
             clientSocket.BeginSend(data,0,data.Length,SocketFlags.None,new AsyncCallback(OnSend),null);
         }
 
@@ -293,8 +320,15 @@ namespace TFMS_Space
         {
             Data msgToSend = new Data(Command.Message, data, strName);
             byte[] d = msgToSend.ToByte();
-            Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", d.Length), strName);
-            clientSocket.Send(lenToSend.ToByte());
+            lastMessage=msgToSend.ToString();
+            if (d.Length >= TFMSConsts.buffSize)
+            {
+                Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", d.Length), strName);
+                lastMessage= lenToSend.ToString();
+                clientSocket.Send(lenToSend.ToByte());
+                Thread.Sleep(TFMSConsts.delayTime);
+            }
+            lastMessage= msgToSend.ToString();
             clientSocket.BeginSend(d, 0, d.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
         }
         #endregion
@@ -314,11 +348,12 @@ namespace TFMS_Space
 
         private void OnReceive(IAsyncResult ar)
         {
-            int bufSize = 1024;
+            long bufSize = TFMSConsts.buffSize;
             try
             {
-                clientSocket.EndReceive(ar);
-
+                int numBytesReceived = clientSocket.EndReceive(ar);
+                byte[] temp = new byte[numBytesReceived];
+                Array.Copy(byteData, temp, numBytesReceived);
                 Data msgReceived = new Data(byteData);
                 //Accordingly process the message received
                 switch (msgReceived.cmdCommand)
@@ -339,12 +374,12 @@ namespace TFMS_Space
                         listReceived(msgReceived);
                         break;
                     case Command.MsgLen: // this will let us use HUGE messages
-                        bufSize=int.Parse(msgReceived.strMessage);
-                        
+                        bufSize = int.Parse(msgReceived.strMessage);
+
                         break;
                 }
 
-                byteData = new byte[bufSize+BUFF_SIZE];
+                byteData = new byte[bufSize];
 
                 clientSocket.BeginReceive(byteData,
                                           0,
@@ -358,6 +393,14 @@ namespace TFMS_Space
             {
                 Console.WriteLine("this object has been disposed");
             }
+            catch (SocketException ex)
+            {
+                Console.WriteLine(ex.Message);
+                if (ex.SocketErrorCode == SocketError.ConnectionReset)
+                    this.clientSocket = null;
+
+            }
+            
             
         }
         #endregion
@@ -365,8 +408,15 @@ namespace TFMS_Space
 
     //The data structure by which the server and the client interact with 
     //each other
+    [Serializable]
     public class Data
     {
+        public string strName;      //Name by which the client logs into the room
+        public string strMessage;   //Message text
+        public Command cmdCommand;  //Command type (login, logout, send message, etcetera)
+        public bool acknowledged;
+        public DateTime timeStamp;
+
         //Default constructor
         public Data()
             :this(Command.Null,null,null)
@@ -375,74 +425,58 @@ namespace TFMS_Space
         public Data(Command c,string msg,string name)
         {
             cmdCommand = c; strMessage = msg; strName = name; acknowledged = false;
+            timeStamp = DateTime.Now;
         }
 
         //Converts the bytes into an object of type Data
         public Data(byte[] data)
         {
-            //The first four bytes are for the Command
-            this.cmdCommand = (Command)BitConverter.ToInt32(data, 0);
-            if (Enum.GetName(typeof(Command), this.cmdCommand) == null)
-            {
-                Console.WriteLine("bad command...");
-                return;
-            }
+            Data temp;
+            MemoryStream ms = new MemoryStream(data);
+            XmlSerializer xser = new XmlSerializer(typeof(Data));
+            string tempstr = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
+            temp = (Data) xser.Deserialize(ms);
+            this.Clone(temp);
+        }
 
-            //The next four store the length of the name
-            int nameLen = BitConverter.ToInt32(data, 4);
-
-            //The next four store the length of the message
-            int msgLen = BitConverter.ToInt32(data, 8);
-
-            //This check makes sure that strName has been passed in the array of bytes
-            if (nameLen > 0)
-                this.strName = Encoding.UTF8.GetString(data, 12, nameLen);
-            else
-                this.strName = null;
-
-            //This checks for a null message field
-            if (msgLen > 0)
-                this.strMessage = Encoding.UTF8.GetString(data, 12 + nameLen, msgLen);
-            else
-                this.strMessage = null;
-            acknowledged = false;
+        public void Clone(Data d)
+        {
+            if (d == null) return;
+            this.acknowledged = d.acknowledged;
+            this.cmdCommand = d.cmdCommand;
+            this.strMessage = d.strMessage;
+            this.strName = d.strName;
+            this.timeStamp = d.timeStamp;
         }
 
         //Converts the Data structure into an array of bytes
         public byte[] ToByte()
         {
-            List<byte> result = new List<byte>();
-
-            //First four are for the Command
-            result.AddRange(BitConverter.GetBytes((int)cmdCommand));
-
-            //Add the length of the name
-            if (strName != null)
-                result.AddRange(BitConverter.GetBytes(strName.Length));
-            else
-                result.AddRange(BitConverter.GetBytes(0));
-
-            //Length of the message
-            if (strMessage != null)
-                result.AddRange(BitConverter.GetBytes(strMessage.Length));
-            else
-                result.AddRange(BitConverter.GetBytes(0));
-
-            //Add the name
-            if (strName != null)
-                result.AddRange(Encoding.UTF8.GetBytes(strName));
-
-            //And, lastly we add the message text to our array of bytes
-            if (strMessage != null)
-                result.AddRange(Encoding.UTF8.GetBytes(strMessage));
-
-            return result.ToArray();
+            XmlSerializer xser = new XmlSerializer(typeof(Data));
+            MemoryStream ms = new MemoryStream();
+            xser.Serialize(ms, this);
+            ms.Seek(0, SeekOrigin.Begin);
+            return ms.GetBuffer();
+        }
+        public override  string ToString()
+        {
+            XmlSerializer xser = new XmlSerializer(typeof(Data));
+            MemoryStream ms = new MemoryStream();
+            xser.Serialize(ms, this);
+            return System.Text.Encoding.UTF8.GetString(ms.GetBuffer());
         }
 
-        public string strName;      //Name by which the client logs into the room
-        public string strMessage;   //Message text
-        public Command cmdCommand;  //Command type (login, logout, send message, etcetera)
-        public bool acknowledged;
+        
+        public Brush dispColor
+        {
+            get
+            {
+                if (!acknowledged)
+                    return Brushes.Red;
+                else
+                    return Brushes.Green;
+            }
+        }
     }
 
     //The commands for interaction between the server and the client
