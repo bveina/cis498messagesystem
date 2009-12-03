@@ -1,0 +1,144 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DCCA24BB-51D4-485B-B429-7B2CA8421341}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DrawingBox</RootNamespace>
+    <AssemblyName>DrawingBox</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Drawingbox2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Drawingbox2.Designer.cs">
+      <DependentUpon>Drawingbox2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DrawingBox3.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DrawingBox3.Designer.cs">
+      <DependentUpon>DrawingBox3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PathData.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControl1 Backup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl1 Backup.designer.cs">
+      <DependentUpon>UserControl1 Backup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="vectorBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="vectorBox.Designer.cs">
+      <DependentUpon>vectorBox.cs</DependentUpon>
+    </Compile>
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Drawingbox2.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Drawingbox2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DrawingBox3.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DrawingBox3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl1 Backup.resx">
+      <DependentUpon>UserControl1 Backup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="vectorBox.resx">
+      <DependentUpon>vectorBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pencil-32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eraser-2-32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pen-16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pen-32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pen-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pen-128x128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pen-256x256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Large Brush.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Medium Brush.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Small Brush.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\undo_32x32.PNG" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
