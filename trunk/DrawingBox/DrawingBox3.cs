@@ -12,11 +12,12 @@ using System.IO;
 using System.Xml;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
 namespace DrawingBox
 {
     public partial class DrawingBox3 : UserControl
     {
-
+        private const bool useXML = false;
         private int BigSize = 10;
         private int MedSize = 4;
         private int SmlSize = 1;
@@ -70,7 +71,7 @@ namespace DrawingBox
         }
         public string serialize()
         {
-            if (false)
+            if (useXML)
             {
                 XmlSerializer xser = new XmlSerializer(typeof(List<PathData>));
                 MemoryStream ms = new MemoryStream();
@@ -201,7 +202,7 @@ namespace DrawingBox
         {
             Rectangle temp = this.ClientRectangle;
             temp.Height = temp.Height - this.toolStrip1.Height;
-            e.Graphics.Clear(this.BackColor);
+             e.Graphics.Clear(this.BackColor);
             if (this.BackgroundImage != null)
             {
                 if (this.BackgroundImageLayout == ImageLayout.None)
