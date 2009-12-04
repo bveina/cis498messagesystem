@@ -123,17 +123,21 @@ namespace ComplexChatRoo
 
                 if (TFMSConsts.useXML)
                 {
-                    XmlSerializer xs = new XmlSerializer(typeof(List<DrawingBox.PathData>));
-                    MemoryStream ms = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(hash));
-                    myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
-                    ms.Close();
+                    using (MemoryStream ms = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(hash)))
+                    {
+                        XmlSerializer xs = new XmlSerializer(typeof(List<DrawingBox.PathData>));
+                        myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
+                        ms.Close();
+                    }
                 }
                 else
                 {
-                    BinaryFormatter xs = new BinaryFormatter();
-                    MemoryStream ms = new MemoryStream(Convert.FromBase64String(hash));
-                    myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
-                    ms.Close();
+                    using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(hash)))
+                    {
+                        BinaryFormatter xs = new BinaryFormatter();
+                        myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
+                        ms.Close();
+                    }
                 }
                 
 

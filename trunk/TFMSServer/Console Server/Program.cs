@@ -30,6 +30,7 @@ namespace Console_Server
                         } 
                         Console.WriteLine("-------------------");
                     break;
+
                 }
                 input = Console.ReadLine();
             }
@@ -52,6 +53,7 @@ namespace Console_Server
                 Console.WriteLine("{0} has sent a long message", d.strName );
             else
                 Console.WriteLine("{0} has sent \"{1}\"", d.strName, d.strMessage);
+            //LOGmsg(d);
         }
     }
 }
