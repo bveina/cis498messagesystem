@@ -41,9 +41,6 @@ namespace TFMS_Space
     }
     public class TFMSServer
     {
-        // info about connected clients
-        
-        
         public List<ClientInfo> clientList;
         Socket serverSocket; // main socket to listen to;
         byte[] byteData;
@@ -106,13 +103,22 @@ namespace TFMS_Space
         {
             while (!ar.IsCompleted) Thread.Sleep(100);
             long buffSize = TFMSConsts.buffSize;
-            Socket clientSocket = (Socket)ar.AsyncState;
+            Socket clientSocket = (Socket)ar.AsyncState;     // get the socket that received data
+
+
+            #region get ClientInfo based on clientSocket
+            // attempt to find the ClientInfo related to the socket
+            // if there is no client info CI will be null
+            //TODO: implement as a hash
             ClientInfo CI=null;
             if (findIndexFromClient(clientList, clientSocket) >= 0)
                 CI = clientList[findIndexFromClient(clientList, clientSocket)];
-            
-                        
+            #endregion
+
             Console.WriteLine("\n\nData Received from:{0}", getNamefromSocket(clientSocket));
+
+            //attempt to get the data and convert it into data.
+            #region get Data message from socket
             Data msgReceived;
             try
             {
@@ -133,16 +139,19 @@ namespace TFMS_Space
                 msgReceived = new Data(Command.Logout, null, getNamefromSocket(clientSocket));
 
             }
+            #endregion
+
+            #region generate message to send to clients
             Data msgToSend = new Data();
-
-
             msgToSend.cmdCommand = msgReceived.cmdCommand;
             msgToSend.strName = msgReceived.strName;
+            #endregion
 
             switch (msgReceived.cmdCommand)
             {
-                //When a user logs in to the server then we add her to our list of clients
                 case Command.Login:
+                    #region handle Login
+                    //When a user logs in to the server then we add her to our list of clients
                     logonRequested(msgReceived);
                     ClientInfo clientInfo = new ClientInfo(clientSocket, msgReceived.strName);
                     clientList.Add(clientInfo);
@@ -154,8 +163,10 @@ namespace TFMS_Space
                     CI = clientInfo; // i hope this is a reference assignment
                     //buffSize = TFMSConsts.buffSize;
                     //byteData = new byte[buffSize];
+                    #endregion
                     break;
                 case Command.Logout:
+                    #region handle Logout
                     Console.WriteLine("Received Logout from:{0}", getNamefromSocket(clientSocket));
                     logoffRequested(msgReceived);
                     //find the index of the client whose socket we are provided
@@ -164,35 +175,43 @@ namespace TFMS_Space
                     //Console.WriteLine("EndReceive:");
                     clientSocket.Close();
                     msgToSend.strMessage = msgReceived.strName;
+                    #endregion
                     break;
-                
                 case Command.List:
+                    #region handle List
                     Console.WriteLine("Receved List Rqfrom:{0}", getNamefromSocket(clientSocket));
                     ListRequested(msgReceived);
                     msgToSend = GetClientListMessage();
                     //send to a single person
                     sendTFMSmsg(msgToSend, clientSocket, new AsyncCallback(OnSend));
                     buffSize = TFMSConsts.buffSize;
+                    #endregion
                     break;
                 case Command.Message:
-                    Console.WriteLine("Received Message from:{0} size=({1})", getNamefromSocket(clientSocket), byteData.Length);
+                    #region handle Message
+                    Console.WriteLine("Received Message from:{0} size=({1})", getNamefromSocket(clientSocket), CI.buffer.Length);
                     RelayRequested(msgReceived);
                     msgToSend.strMessage = msgReceived.strMessage;
+                    #endregion
                     break;
                 case Command.MsgLen:
-
+                    #region handle MsgLen
                     buffSize = int.Parse(msgReceived.strMessage)+TFMSConsts.buffSize;
                     Console.WriteLine("Received MsgLen:{0} from:{1}", buffSize, getNamefromSocket(clientSocket));
                     CI.buffer=new byte[ buffSize];
                     //byteData = new byte[buffSize];
+                    #endregion
                     break;
                 default:
+                    #region handle unknown cmd
                     Console.WriteLine("cant interpret command! aborting relay.");
                     Console.WriteLine("BeginRecive from :{0}", getNamefromSocket(clientSocket));
                     clientSocket.BeginReceive(CI.buffer, 0, CI.buffer.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
                     return;
+                    #endregion
             }
 
+            #region rebrodcast message as needed
             //broadcast messages if needed
             if (msgToSend.cmdCommand != Command.List && msgToSend.cmdCommand != Command.MsgLen)
             {
@@ -205,6 +224,8 @@ namespace TFMS_Space
                     //}
                 }
             }
+            #endregion
+            #region start receving again
             //after dealing with the message we need to keep listening
             // unless the message was "peace out!"
             if (msgReceived.cmdCommand != Command.Logout)
@@ -212,6 +233,7 @@ namespace TFMS_Space
                 Console.WriteLine("Waiting for data from :{0} receiveLen={1}", getNamefromSocket(clientSocket),byteData.Length);
                 clientSocket.BeginReceive(CI.buffer, 0, CI.buffer.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
             }
+            #endregion
 
         }
         public void OnSend(IAsyncResult ar)
@@ -279,7 +301,6 @@ namespace TFMS_Space
         public event MessageRecieved listReceived;
         public event MessageRecieved disconnectDetected;
         #endregion
-
         #region contructors
         public TFMSClient()
             :this(1000,"Jon Doe")
@@ -292,7 +313,6 @@ namespace TFMS_Space
             byteData = new byte[TFMSConsts.buffSize];
         }
         #endregion
-
         #region basic command tasks
         public bool connect(string ipaddr) // connect to server
         {
@@ -365,7 +385,6 @@ namespace TFMS_Space
             clientSocket.BeginSend(d, 0, d.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
         }
         #endregion
-
         #region async methods
         private void OnSend(IAsyncResult ar)
         {
@@ -483,10 +502,12 @@ namespace TFMS_Space
         public Data(byte[] data)
         {
             Data temp;
-            MemoryStream ms = new MemoryStream(data);
-            XmlSerializer xser = new XmlSerializer(typeof(Data));
-            string tempstr = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
-            temp = (Data) xser.Deserialize(ms);
+            using (MemoryStream ms = new MemoryStream(data))
+            {
+                XmlSerializer xser = new XmlSerializer(typeof(Data));
+                string tempstr = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
+                temp = (Data)xser.Deserialize(ms);
+            }
             this.Clone(temp);
         }
 
@@ -503,18 +524,23 @@ namespace TFMS_Space
         //Converts the Data structure into an array of bytes
         public byte[] ToByte()
         {
-            XmlSerializer xser = new XmlSerializer(typeof(Data));
-            MemoryStream ms = new MemoryStream();
-            xser.Serialize(ms, this);
-            ms.Seek(0, SeekOrigin.Begin);
-            return ms.GetBuffer();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                XmlSerializer xser = new XmlSerializer(typeof(Data));
+                xser.Serialize(ms, this);
+                ms.Seek(0, SeekOrigin.Begin); // TODO: i think this can be removed but im to scared to do it atm (12-04-2009)
+                return ms.GetBuffer();
+            }
         }
         public override  string ToString()
         {
-            XmlSerializer xser = new XmlSerializer(typeof(Data));
-            MemoryStream ms = new MemoryStream();
-            xser.Serialize(ms, this);
-            return System.Text.Encoding.UTF8.GetString(ms.GetBuffer());
+            using (MemoryStream ms = new MemoryStream())
+            {
+                XmlSerializer xser = new XmlSerializer(typeof(Data));
+
+                xser.Serialize(ms, this);
+                return System.Text.Encoding.UTF8.GetString(ms.GetBuffer());
+            }
         }
 
         
