@@ -68,7 +68,8 @@ namespace DrawingBox
         private void vectorBox_Paint(object sender, PaintEventArgs e)
         {
             Rectangle temp = this.ClientRectangle;
-            e.Graphics.Clear(this.BackColor);
+            //e.Graphics.Clear(this.BackColor);
+            
             if (this.BackgroundImage != null)
             {
                 if (this.BackgroundImageLayout == ImageLayout.None)

@@ -64,31 +64,37 @@ namespace DrawingBox
         }
         public string getBase64Hash()
         {
-            MemoryStream ms=new MemoryStream();
-            this.getImage().Save(ms,System.Drawing.Imaging.ImageFormat.Png);
-            byte[] byteImage=ms.ToArray();
-            return Convert.ToBase64String(byteImage);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                this.getImage().Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                byte[] byteImage = ms.ToArray();
+                return Convert.ToBase64String(byteImage);
+            }
         }
         public string serialize()
         {
             if (useXML)
             {
-                XmlSerializer xser = new XmlSerializer(typeof(List<PathData>));
-                MemoryStream ms = new MemoryStream();
-                xser.Serialize(ms, myPaths);
-                ms.Seek(0, SeekOrigin.Begin);
-                //string result = Convert.ToBase64String(ms.GetBuffer());
-                string result = System.Text.Encoding.UTF8.GetString(ms.ToArray());
-                return string.Format("{0},{1},{2}", this.ClientRectangle.Width, this.ClientRectangle.Height - this.toolStrip1.Height, result);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    XmlSerializer xser = new XmlSerializer(typeof(List<PathData>));
+                    xser.Serialize(ms, myPaths);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    //string result = Convert.ToBase64String(ms.GetBuffer());
+                    string result = System.Text.Encoding.UTF8.GetString(ms.ToArray());
+                    return string.Format("{0},{1},{2}", this.ClientRectangle.Width, this.ClientRectangle.Height - this.toolStrip1.Height, result);
+                }
             }
             else
             {
-                BinaryFormatter xser = new BinaryFormatter();
-                MemoryStream ms = new MemoryStream();
-                xser.Serialize(ms, myPaths);
-                ms.Seek(0, SeekOrigin.Begin);
-                string result = Convert.ToBase64String(ms.GetBuffer());
-                return string.Format("{0},{1},{2}", this.ClientRectangle.Width, this.ClientRectangle.Height - this.toolStrip1.Height, result);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    BinaryFormatter xser = new BinaryFormatter();
+                    xser.Serialize(ms, myPaths);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    string result = Convert.ToBase64String(ms.GetBuffer());
+                    return string.Format("{0},{1},{2}", this.ClientRectangle.Width, this.ClientRectangle.Height - this.toolStrip1.Height, result);
+                }
             }
         }
 
