@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "simpleChatRoom", "simpleCha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComplexChatRoo", "ComplexChatRoo\ComplexChatRoo.csproj", "{FE96EF8F-851E-4EF0-9A0F-CA56E9483AC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingBox", "..\DrawingBox\DrawingBox\DrawingBox.csproj", "{DCCA24BB-51D4-485B-B429-7B2CA8421341}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingBox", "DrawingBox\DrawingBox.csproj", "{DCCA24BB-51D4-485B-B429-7B2CA8421341}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution

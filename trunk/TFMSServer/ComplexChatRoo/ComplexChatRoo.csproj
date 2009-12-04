@@ -106,7 +106,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DrawingBox\DrawingBox\DrawingBox.csproj">
+    <ProjectReference Include="..\DrawingBox\DrawingBox.csproj">
       <Project>{DCCA24BB-51D4-485B-B429-7B2CA8421341}</Project>
       <Name>DrawingBox</Name>
     </ProjectReference>
