@@ -23,17 +23,20 @@ namespace TFMS_Space
     {
         public const int delayTime = 100;
         public const long buffSize = 1024;
+        public const bool useXML = false;
     }
     public delegate void MessageRecieved(Data dataReceived);
-    public struct ClientInfo
+    public class ClientInfo
     {
         public Socket socket;
         public string strName;
+        public byte[] buffer;
 
         public ClientInfo(Socket a, string b)
         {
             socket = a;
             strName = b;
+            buffer = null;
         }
     }
     public class TFMSServer
@@ -95,6 +98,7 @@ namespace TFMS_Space
 
             //setup the async receive
             Console.WriteLine("Begin Recieve:");
+
             clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None,
                          new AsyncCallback(OnReceive), clientSocket);
         }
@@ -103,12 +107,32 @@ namespace TFMS_Space
             while (!ar.IsCompleted) Thread.Sleep(100);
             long buffSize = TFMSConsts.buffSize;
             Socket clientSocket = (Socket)ar.AsyncState;
-            Console.WriteLine("End Receive from:{0}", getNamefromSocket(clientSocket));
-            int numBytesReceived = clientSocket.EndReceive(ar);
-            byte [] temp= new byte[numBytesReceived];
-            Array.Copy(byteData, temp, numBytesReceived);
-            Data msgReceived = new Data(temp);
+            ClientInfo CI=null;
+            if (findIndexFromClient(clientList, clientSocket) >= 0)
+                CI = clientList[findIndexFromClient(clientList, clientSocket)];
+            
+                        
+            Console.WriteLine("\n\nData Received from:{0}", getNamefromSocket(clientSocket));
+            Data msgReceived;
+            try
+            {
+                int numBytesReceived = clientSocket.EndReceive(ar);
+                byte[] temp = new byte[numBytesReceived];
+                if (CI == null || CI.buffer == null)
+                {
+                    Array.Copy(byteData, temp, numBytesReceived);
+                }
+                else
+                {
+                    Array.Copy(CI.buffer, temp, numBytesReceived);
+                }
+                msgReceived = new Data(temp);
+            }
+            catch (SocketException ex)
+            {
+                msgReceived = new Data(Command.Logout, null, getNamefromSocket(clientSocket));
 
+            }
             Data msgToSend = new Data();
 
 
@@ -126,8 +150,10 @@ namespace TFMS_Space
                     //just pass the name to other clients for now
                     // let the client program handle how to deal with it.
                     msgToSend.strMessage = msgReceived.strName;
-                    buffSize = TFMSConsts.buffSize;
-                    byteData = new byte[buffSize];
+                    clientInfo.buffer = new byte[TFMSConsts.buffSize];
+                    CI = clientInfo; // i hope this is a reference assignment
+                    //buffSize = TFMSConsts.buffSize;
+                    //byteData = new byte[buffSize];
                     break;
                 case Command.Logout:
                     Console.WriteLine("Received Logout from:{0}", getNamefromSocket(clientSocket));
@@ -157,12 +183,13 @@ namespace TFMS_Space
 
                     buffSize = int.Parse(msgReceived.strMessage)+TFMSConsts.buffSize;
                     Console.WriteLine("Received MsgLen:{0} from:{1}", buffSize, getNamefromSocket(clientSocket));
-                    byteData = new byte[buffSize];
+                    CI.buffer=new byte[ buffSize];
+                    //byteData = new byte[buffSize];
                     break;
                 default:
                     Console.WriteLine("cant interpret command! aborting relay.");
                     Console.WriteLine("BeginRecive from :{0}", getNamefromSocket(clientSocket));
-                    clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
+                    clientSocket.BeginReceive(CI.buffer, 0, CI.buffer.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
                     return;
             }
 
@@ -182,8 +209,8 @@ namespace TFMS_Space
             // unless the message was "peace out!"
             if (msgReceived.cmdCommand != Command.Logout)
             {
-                Console.WriteLine("BeginRecive from :{0} receiveLen={1}", getNamefromSocket(clientSocket),byteData.Length);
-                clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
+                Console.WriteLine("Waiting for data from :{0} receiveLen={1}", getNamefromSocket(clientSocket),byteData.Length);
+                clientSocket.BeginReceive(CI.buffer, 0, CI.buffer.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
             }
 
         }
@@ -250,6 +277,7 @@ namespace TFMS_Space
         public event MessageRecieved logoffReceived;
         public event MessageRecieved dataReceived;
         public event MessageRecieved listReceived;
+        public event MessageRecieved disconnectDetected;
         #endregion
 
         #region contructors
@@ -356,10 +384,27 @@ namespace TFMS_Space
             long bufSize = TFMSConsts.buffSize;
             try
             {
-                int numBytesReceived = clientSocket.EndReceive(ar);
-                byte[] temp = new byte[numBytesReceived];
-                Array.Copy(byteData, temp, numBytesReceived);
-                Data msgReceived = new Data(byteData);
+                int numBytesReceived=0;
+                try
+                {
+                    numBytesReceived = clientSocket.EndReceive(ar);
+                }
+                catch (Exception ex)
+                {
+                    disconnectDetected(null);
+                    return;
+                }
+                Data msgReceived;
+                if (numBytesReceived == 0)
+                {
+                    msgReceived = new Data(Command.Null, "", "");
+                }
+                else
+                {
+                    byte[] temp = new byte[numBytesReceived];
+                    Array.Copy(byteData, temp, numBytesReceived);
+                    msgReceived = new Data(temp);
+                }
                 //Accordingly process the message received
                 switch (msgReceived.cmdCommand)
                 {
@@ -380,11 +425,12 @@ namespace TFMS_Space
                         break;
                     case Command.MsgLen: // this will let us use HUGE messages
                         bufSize = int.Parse(msgReceived.strMessage);
-
+                        break;
+                    case Command.Null:
                         break;
                 }
 
-                byteData = new byte[bufSize+TFMSConsts.buffSize];
+                byteData = new byte[bufSize];
 
                 clientSocket.BeginReceive(byteData,
                                           0,

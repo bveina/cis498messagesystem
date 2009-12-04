@@ -43,6 +43,7 @@ namespace ComplexChatRoo
                     myClient.logoffReceived += new MessageRecieved(handleLogoff);
                     myClient.listReceived += new MessageRecieved(handleList);
                     myClient.dataReceived += new MessageRecieved(handleMessage);
+                    myClient.disconnectDetected += new MessageRecieved(myClient_disconnectDetected);
                 }
                 else if (r == DialogResult.Cancel)
                 {
@@ -52,6 +53,15 @@ namespace ComplexChatRoo
 
             } while (myClient == null || !myClient.connect(serverAddress));
             //myClient.getList();
+            this.Text = name;
+        }
+
+        void myClient_disconnectDetected(Data dataReceived)
+        {
+            //this.Close();
+            myClient = null;
+            MessageBox.Show("The server has probably blown up. We will now exit", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Application.Exit();
         }
 
 
@@ -110,10 +120,22 @@ namespace ComplexChatRoo
                 string mystr = myData.strMessage;
                 string[] items = mystr.Split(',');
                 string hash = items[2];
-                BinaryFormatter xs = new BinaryFormatter();
-                MemoryStream ms = new MemoryStream(Convert.FromBase64String(hash));
-                myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
-                ms.Close();
+
+                if (TFMSConsts.useXML)
+                {
+                    XmlSerializer xs = new XmlSerializer(typeof(List<DrawingBox.PathData>));
+                    MemoryStream ms = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(hash));
+                    myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
+                    ms.Close();
+                }
+                else
+                {
+                    BinaryFormatter xs = new BinaryFormatter();
+                    MemoryStream ms = new MemoryStream(Convert.FromBase64String(hash));
+                    myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
+                    ms.Close();
+                }
+                
 
                 vectorBox1.SuspendLayout();
                 vectorBox1.pathWidth = int.Parse(items[0]);
@@ -174,6 +196,12 @@ namespace ComplexChatRoo
             e.DrawFocusRectangle();
             
 
+        }
+
+        private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
+        {
+            NotifyIcon ni = (NotifyIcon)sender;
+            this.BringToFront();
         }
     }
 }

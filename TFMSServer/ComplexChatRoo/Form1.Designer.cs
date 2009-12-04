@@ -34,12 +34,12 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.cmdSend = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.drawingBox31 = new DrawingBox.DrawingBox3();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.vectorBox1 = new DrawingBox.vectorBox();
             this.lstMessages = new System.Windows.Forms.ListBox();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.tabPages.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -102,23 +102,6 @@
             this.cmdSend.UseVisualStyleBackColor = true;
             this.cmdSend.Click += new System.EventHandler(this.cmdSend_Click);
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.splitContainer1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 4);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(559, 425);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Acknowladge";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = " ";
-            this.notifyIcon1.Visible = true;
-            // 
             // drawingBox31
             // 
             this.drawingBox31.BackColor = System.Drawing.SystemColors.Control;
@@ -133,6 +116,17 @@
             this.drawingBox31.Name = "drawingBox31";
             this.drawingBox31.Size = new System.Drawing.Size(547, 358);
             this.drawingBox31.TabIndex = 1;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.splitContainer1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 4);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(559, 425);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Acknowladge";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // splitContainer1
             // 
@@ -180,6 +174,14 @@
             this.lstMessages.TabIndex = 0;
             this.lstMessages.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstMessages_DrawItem);
             this.lstMessages.SelectedIndexChanged += new System.EventHandler(this.lstMessages_SelectedIndexChanged);
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = " ";
+            this.notifyIcon1.Visible = true;
+            this.notifyIcon1.BalloonTipClicked += new System.EventHandler(this.notifyIcon1_BalloonTipClicked);
+            this.notifyIcon1.Click += new System.EventHandler(this.notifyIcon1_BalloonTipClicked);
             // 
             // Form1
             // 
