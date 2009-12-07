@@ -502,11 +502,19 @@ namespace TFMS_Space
         public Data(byte[] data)
         {
             Data temp;
-            using (MemoryStream ms = new MemoryStream(data))
+            try
             {
-                XmlSerializer xser = new XmlSerializer(typeof(Data));
-                string tempstr = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
-                temp = (Data)xser.Deserialize(ms);
+                using (MemoryStream ms = new MemoryStream(data))
+                {
+                    XmlSerializer xser = new XmlSerializer(typeof(Data));
+                    string tempstr = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
+                    temp = (Data)xser.Deserialize(ms);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Clone(new Data(Command.Null, "", "oops"));
+                return ;
             }
             this.Clone(temp);
         }
