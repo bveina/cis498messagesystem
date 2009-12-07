@@ -260,6 +260,14 @@ namespace DrawingBox
             return -1;
         }
 
+        private void toolStripButton1_Click_1(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.AnyColor = true;
+            cd.ShowDialog();
+            this.myColor = cd.Color;
+        }
+
         
         
     }   
