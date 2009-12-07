@@ -28,6 +28,7 @@ namespace DrawingBox
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DrawingBox3));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.cmdDraw = new System.Windows.Forms.ToolStripButton();
             this.cmdErase = new System.Windows.Forms.ToolStripButton();
@@ -38,6 +39,7 @@ namespace DrawingBox
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.cmdUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +55,8 @@ namespace DrawingBox
             this.cmdSizeTiny,
             this.toolStripSeparator2,
             this.cmdUndo,
-            this.toolStripSeparator3});
+            this.toolStripSeparator3,
+            this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 212);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(384, 25);
@@ -140,6 +143,16 @@ namespace DrawingBox
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click_1);
+            // 
             // DrawingBox3
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -175,6 +188,7 @@ namespace DrawingBox
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton cmdUndo;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
 
     }
 }
