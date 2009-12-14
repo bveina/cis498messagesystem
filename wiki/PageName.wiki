@@ -1,3 +1,4 @@
+Featured
 #summary List of different parts of the project
 = Introduction =
 
