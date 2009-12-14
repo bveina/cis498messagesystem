@@ -1,4 +1,5 @@
 #summary List of different parts of the project
+#labels Featured
 = Introduction =
 
 This Tactical Field Message system is comprised of just a few distinct parts.
