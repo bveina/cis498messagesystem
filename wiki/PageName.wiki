@@ -1,0 +1,18 @@
+#summary List of different parts of the project
+= Introduction =
+
+This Tactical Field Message system is comprised of just a few distinct parts.
+  # Back-end Server
+  # Back-end Client
+  # Drawing Box
+  # Vector Box
+  # Front End Client
+  # Front End Server
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
