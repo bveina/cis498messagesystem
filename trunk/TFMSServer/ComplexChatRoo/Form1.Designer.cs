@@ -40,6 +40,8 @@
             this.vectorBox1 = new DrawingBox.vectorBox();
             this.lstMessages = new System.Windows.Forms.ListBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.cmdCopy = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPages.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -47,6 +49,7 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabPages
@@ -140,7 +143,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.lstMessages);
+            this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel1);
             this.splitContainer1.Size = new System.Drawing.Size(553, 419);
             this.splitContainer1.SplitterDistance = 431;
             this.splitContainer1.TabIndex = 0;
@@ -168,9 +171,9 @@
             this.lstMessages.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.lstMessages.FormattingEnabled = true;
             this.lstMessages.IntegralHeight = false;
-            this.lstMessages.Location = new System.Drawing.Point(0, 0);
+            this.lstMessages.Location = new System.Drawing.Point(3, 3);
             this.lstMessages.Name = "lstMessages";
-            this.lstMessages.Size = new System.Drawing.Size(118, 419);
+            this.lstMessages.Size = new System.Drawing.Size(112, 384);
             this.lstMessages.TabIndex = 0;
             this.lstMessages.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstMessages_DrawItem);
             this.lstMessages.SelectedIndexChanged += new System.EventHandler(this.lstMessages_SelectedIndexChanged);
@@ -182,6 +185,32 @@
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.BalloonTipClicked += new System.EventHandler(this.notifyIcon1_BalloonTipClicked);
             this.notifyIcon1.Click += new System.EventHandler(this.notifyIcon1_BalloonTipClicked);
+            // 
+            // cmdCopy
+            // 
+            this.cmdCopy.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cmdCopy.Location = new System.Drawing.Point(3, 393);
+            this.cmdCopy.Name = "cmdCopy";
+            this.cmdCopy.Size = new System.Drawing.Size(112, 23);
+            this.cmdCopy.TabIndex = 1;
+            this.cmdCopy.Text = "CopyTo";
+            this.cmdCopy.UseVisualStyleBackColor = true;
+            this.cmdCopy.Click += new System.EventHandler(this.cmdCopy_Click);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.cmdCopy, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lstMessages, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(118, 419);
+            this.tableLayoutPanel1.TabIndex = 2;
             // 
             // Form1
             // 
@@ -200,6 +229,7 @@
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -216,6 +246,8 @@
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private DrawingBox.DrawingBox3 drawingBox31;
         private DrawingBox.vectorBox vectorBox1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button cmdCopy;
     }
 }
 

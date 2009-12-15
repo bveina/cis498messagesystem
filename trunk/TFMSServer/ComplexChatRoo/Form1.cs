@@ -28,6 +28,7 @@ namespace ComplexChatRoo
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            #region get server and client info and try to login to the server
             LoginDialog login = new LoginDialog();
             DialogResult r;
             do
@@ -52,10 +53,11 @@ namespace ComplexChatRoo
                 }
 
             } while (myClient == null || !myClient.connect(serverAddress));
-            //myClient.getList();
-            this.Text = name;
+            #endregion
+            this.Text = name; // set the form title to show your name
         }
 
+        #region message handling routines
         void myClient_disconnectDetected(Data dataReceived)
         {
             //this.Close();
@@ -63,8 +65,6 @@ namespace ComplexChatRoo
             MessageBox.Show("The server has probably blown up. We will now exit", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Application.Exit();
         }
-
-
         void handleLogon(Data msg)
         {
             notifyIcon1.BalloonTipText = string.Format("{0} has joined", msg.strName);
@@ -81,35 +81,38 @@ namespace ComplexChatRoo
             notifyIcon1.Visible = true;
             notifyIcon1.BalloonTipText = string.Format("you've got TFMS");
             notifyIcon1.ShowBalloonTip(5000);
-            if (lstMessages.InvokeRequired) // make the call threadsafe
-            {
+            // make the call to add an item thread safe because chances are that this will be called from another thread
+            if (lstMessages.InvokeRequired) 
                 lstMessages.Invoke(new Action<Data>(delegate(Data a) { lstMessages.Items.Add(a); }), msg);
-            }
             else
-            {
                 lstMessages.Items.Add(msg);
-            }
         }
         void handleList(Data msg)
         {
             notifyIcon1.ShowBalloonTip(500, "List", "you got the list of peers", ToolTipIcon.Info);
         }
+        #endregion
 
+        /// <summary>this sends the current image to the server.</summary>
         private void cmdSend_Click(object sender, EventArgs e)
         {
             myClient.sendMessage(drawingBox31.serialize());
             drawingBox31.Clear();
         }
-
+        
+        /// <summary>if we are exiting we should disconnect from the server.</summary>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            notifyIcon1.Visible = false;
+            notifyIcon1.Dispose();
             if (myClient != null)
                 myClient.disconnect();
         }
 
+        /// <summary> when the user clicks on a message it should be displayed in the vector box. </summary>
         private void lstMessages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            #region (an attempt to use the path data)
+            #region use the path data to recreate the image on the vectorbox
 
             if (lstMessages.SelectedItem == null) return;
             try
@@ -167,6 +170,7 @@ namespace ComplexChatRoo
 
         }
 
+        /// <summary>this handles the custom drawing of the individual items on the list box of messages</summary>
         private void lstMessages_DrawItem(object sender, DrawItemEventArgs e)
         {
             Data tmp = (Data)lstMessages.Items[e.Index];
@@ -206,6 +210,11 @@ namespace ComplexChatRoo
         {
             NotifyIcon ni = (NotifyIcon)sender;
             this.BringToFront();
+        }
+
+        private void cmdCopy_Click(object sender, EventArgs e)
+        {
+            drawingBox31.lines = vectorBox1.Paths;
         }
     }
 }
