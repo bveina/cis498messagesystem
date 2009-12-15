@@ -15,45 +15,108 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DrawingBox
 {
+    /// <summary>
+    /// this is version 3 of the DrawingBox. this control is used to allow the user to draw easily
+    /// using different sized brushes and colors 
+    /// also it supports erase, unlimited undo, and easy serialization for transmission across any medium.
+    /// </summary>
     public partial class DrawingBox3 : UserControl
     {
+        /// <summary>
+        /// not implemented yet.
+        /// currently serialization is done using BinaryFormatter. sometimes is it desirable to see the data as xml.
+        /// in future if xml serialization can be achieved this would be a simple way to switch back and forth.
+        /// </summary>
         private const bool useXML = false;
+        /// <summary>
+        /// preset for Size of Large brush.
+        /// </summary>
         private int BigSize = 10;
+        /// <summary>
+        /// preset for Size of Medium brush.
+        /// </summary>
         private int MedSize = 4;
+        /// <summary>
+        /// preset for Size of Small brush.
+        /// </summary>
         private int SmlSize = 1;
+        /// <summary>
+        /// all lines are treated as vectors for easy scaling. each line is encapsulated as a PathData (see below)
+        /// </summary>
         private List<PathData> myPaths;
+        /// <summary>
+        /// not used should be removed from code.
+        /// </summary>
         private bool shouldPaint;
+        /// <summary>
+        /// this is the last point the mouse was recorded as being. (updated everytime a mouse move event is raised)
+        /// </summary>
         private Point lastLocation;
+        /// <summary>
+        /// the path that is being constructed (mousebutton is down and a user is drawing right now)
+        /// </summary>
         private PathData currentPath;
+        /// <summary>
+        /// the color that is currently selected
+        /// </summary>
         private Color myColor;
+        /// <summary>
+        /// the width that is currently selected
+        /// </summary>
         private int myWidth;
+        /// <summary>
+        /// the mode we are in, either drawing or erasing
+        /// </summary>
         private bool eraseMode, drawingMode;
 
-        public DrawingBox3()
-        {
-            InitializeComponent();
-        }
-
+        /// <summary>
+        /// the color that is currently selected
+        /// </summary>
         public Color lineColor
         {
             get { return myColor; }
             set { myColor = value; }
         }
+        /// <summary>
+        /// the line width that is currently selected
+        /// </summary>
         public int lineWidth
         {
             get { return myWidth; }
             set { myWidth = value; }
         }
+        /// <summary>
+        /// the list of all lines in the drawing box
+        /// </summary>
         public List<PathData> lines
         {
             get { return myPaths; }
         }
+
+
+
+        /// <summary>
+        /// boilerplate code constructor
+        /// </summary>
+        public DrawingBox3()
+        {
+            InitializeComponent();
+        }
+
+        
+        /// <summary>
+        /// clears the entire drawing surface
+        /// </summary>
         public void Clear()
         {
             myPaths.Clear();
             currentPath = new PathData();
             this.Invalidate();
         }
+        /// <summary>
+        /// flattens the vectors into a single bitmap
+        /// </summary>
+        /// <returns>an image</returns>
         public Bitmap getImage()
         {
             Bitmap temp = new Bitmap(this.Width, this.Height);
@@ -62,6 +125,10 @@ namespace DrawingBox
                 g.DrawPath(new Pen(pd.pathColor, pd.pathWidth), pd.path);
             return temp;
         }
+        /// <summary>
+        /// Deprecated. this loses all vector-iness
+        /// </summary>
+        /// <returns>a string that represents the image</returns>
         public string getBase64Hash()
         {
             using (MemoryStream ms = new MemoryStream())
@@ -71,6 +138,10 @@ namespace DrawingBox
                 return Convert.ToBase64String(byteImage);
             }
         }
+        /// <summary>
+        /// encodes all information required to recreate the image (at any size) into a string.
+        /// </summary>
+        /// <returns>a string representation of the image</returns>
         public string serialize()
         {
             if (useXML)
@@ -85,7 +156,7 @@ namespace DrawingBox
                     return string.Format("{0},{1},{2}", this.ClientRectangle.Width, this.ClientRectangle.Height - this.toolStrip1.Height, result);
                 }
             }
-            else
+            else// currently this is the only way to serialize the thing due to complications with the Graphics path....
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
