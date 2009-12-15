@@ -91,6 +91,7 @@ namespace DrawingBox
         public List<PathData> lines
         {
             get { return myPaths; }
+            set { myPaths = value; }
         }
 
 
