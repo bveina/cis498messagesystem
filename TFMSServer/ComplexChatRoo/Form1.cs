@@ -81,7 +81,7 @@ namespace ComplexChatRoo
             notifyIcon1.Visible = true;
             notifyIcon1.BalloonTipText = string.Format("you've got TFMS");
             notifyIcon1.ShowBalloonTip(5000);
-            if (lstMessages.InvokeRequired)
+            if (lstMessages.InvokeRequired) // make the call threadsafe
             {
                 lstMessages.Invoke(new Action<Data>(delegate(Data a) { lstMessages.Items.Add(a); }), msg);
             }
