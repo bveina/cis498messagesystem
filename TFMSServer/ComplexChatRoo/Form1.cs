@@ -58,6 +58,7 @@ namespace ComplexChatRoo
 
             #region THIS IS A HACK SO WE DON'T POST THE IMAGE ONLINE
             drawingBox31.BackgroundImage = Image.FromFile("c:\\tfmsimage.jpg");
+            vectorBox1.BackgroundImage = Image.FromFile("c:\\tfmsimage.jpg");
             #endregion
         }
 
@@ -162,16 +163,6 @@ namespace ComplexChatRoo
                 MessageBox.Show(ex.Message, "there was an error displaying the image");
             }
             #endregion
-        }
-
-        private void drawingBox31_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void vectorBox1_Load(object sender, EventArgs e)
-        {
-
         }
 
         /// <summary>this handles the custom drawing of the individual items on the list box of messages</summary>
