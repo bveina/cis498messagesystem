@@ -1,0 +1,5 @@
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\TFMSServer\bin\Debug\TFMSServer.dll
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\TFMSServer\bin\Debug\TFMSServer.pdb
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\TFMSServer\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\TFMSServer\obj\Debug\TFMSServer.dll
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\TFMSServer\obj\Debug\TFMSServer.pdb
