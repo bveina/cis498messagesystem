@@ -56,6 +56,9 @@ namespace ComplexChatRoom
             #endregion
             this.Text = name; // set the form title to show your name
 
+            this.Visible = true;
+            this.WindowState = FormWindowState.Maximized;
+
             #region THIS IS A HACK SO WE DON'T POST THE IMAGE ONLINE
             drawingBox31.BackgroundImage = Image.FromFile("c:\\tfmsimage.jpg");
             vectorBox1.BackgroundImage = Image.FromFile("c:\\tfmsimage.jpg");

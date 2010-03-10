@@ -71,7 +71,7 @@ namespace DrawingBox
             this.cmdDraw.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cmdDraw.Name = "cmdDraw";
             this.cmdDraw.Size = new System.Drawing.Size(23, 22);
-            this.cmdDraw.Text = "toolStripButton1";
+            this.cmdDraw.Text = "Draw";
             this.cmdDraw.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // cmdErase
@@ -82,7 +82,7 @@ namespace DrawingBox
             this.cmdErase.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cmdErase.Name = "cmdErase";
             this.cmdErase.Size = new System.Drawing.Size(23, 22);
-            this.cmdErase.Text = "toolStripButton2";
+            this.cmdErase.Text = "Erase Line";
             this.cmdErase.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // toolStripSeparator1
@@ -98,7 +98,7 @@ namespace DrawingBox
             this.cmdSizeBig.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cmdSizeBig.Name = "cmdSizeBig";
             this.cmdSizeBig.Size = new System.Drawing.Size(23, 22);
-            this.cmdSizeBig.Text = "cmdSizeLrg";
+            this.cmdSizeBig.Text = "Large Brush";
             this.cmdSizeBig.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
             // cmdSizeMid
@@ -109,7 +109,7 @@ namespace DrawingBox
             this.cmdSizeMid.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cmdSizeMid.Name = "cmdSizeMid";
             this.cmdSizeMid.Size = new System.Drawing.Size(23, 22);
-            this.cmdSizeMid.Text = "toolStripButton4";
+            this.cmdSizeMid.Text = "Medium Brush";
             this.cmdSizeMid.Click += new System.EventHandler(this.toolStripButton4_Click);
             // 
             // cmdSizeTiny
@@ -120,7 +120,7 @@ namespace DrawingBox
             this.cmdSizeTiny.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cmdSizeTiny.Name = "cmdSizeTiny";
             this.cmdSizeTiny.Size = new System.Drawing.Size(23, 22);
-            this.cmdSizeTiny.Text = "toolStripButton5";
+            this.cmdSizeTiny.Text = "Small Brush";
             this.cmdSizeTiny.Click += new System.EventHandler(this.toolStripButton5_Click);
             // 
             // toolStripSeparator2
@@ -135,7 +135,7 @@ namespace DrawingBox
             this.cmdUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cmdUndo.Name = "cmdUndo";
             this.cmdUndo.Size = new System.Drawing.Size(23, 22);
-            this.cmdUndo.Text = "toolStripButton6";
+            this.cmdUndo.Text = "Undo";
             this.cmdUndo.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
             // toolStripSeparator3
@@ -150,7 +150,7 @@ namespace DrawingBox
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Text = "Color Box";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click_1);
             // 
             // DrawingBox3

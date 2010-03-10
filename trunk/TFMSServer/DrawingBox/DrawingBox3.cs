@@ -290,12 +290,16 @@ namespace DrawingBox
                 else if (this.BackgroundImageLayout == ImageLayout.Center)
                     e.Graphics.DrawImageUnscaled(this.BackgroundImage, this.Width - this.BackgroundImage.Width / 2, this.Height - this.BackgroundImage.Height / 2);
             }
-            foreach (PathData pd in myPaths)
+
+            if (myPaths != null)
             {
-                if (pd.path == null) continue;
-                Pen p = new Pen(pd.pathColor, pd.pathWidth);
-                e.Graphics.DrawPath(p, pd.path);
-                p.Dispose();
+                foreach (PathData pd in myPaths)
+                {
+                    if (pd.path == null) continue;
+                    Pen p = new Pen(pd.pathColor, pd.pathWidth);
+                    e.Graphics.DrawPath(p, pd.path);
+                    p.Dispose();
+                }
             }
             if (currentPath !=null && currentPath.path != null)
             {
