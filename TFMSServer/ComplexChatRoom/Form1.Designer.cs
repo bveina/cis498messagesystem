@@ -128,7 +128,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(559, 425);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Acknowladge";
+            this.tabPage2.Text = "Acknowledge";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // splitContainer1
@@ -217,6 +217,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(567, 483);
+            this.Visible = false;
             this.Controls.Add(this.tabPages);
             this.Name = "Form1";
             this.Text = "Form1";
