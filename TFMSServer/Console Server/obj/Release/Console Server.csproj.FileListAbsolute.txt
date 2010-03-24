@@ -1,0 +1,8 @@
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Release\Console Server.exe
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Release\Console Server.pdb
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Release\TFMSServer.dll
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Release\TFMSServer.pdb
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\obj\Release\Console Server.exe
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\obj\Release\Console Server.pdb
+C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Release\Console Server.exe.config
