@@ -34,14 +34,14 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.cmdSend = new System.Windows.Forms.Button();
-            this.drawingBox31 = new DrawingBox.DrawingBox3();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.vectorBox1 = new DrawingBox.vectorBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cmdCopy = new System.Windows.Forms.Button();
             this.lstMessages = new System.Windows.Forms.ListBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.cmdCopy = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.drawingBox31 = new DrawingBox.DrawingBox3();
+            this.vectorBox1 = new DrawingBox.vectorBox();
             this.tabPages.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -96,29 +96,14 @@
             // 
             // cmdSend
             // 
-            this.cmdSend.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdSend.Location = new System.Drawing.Point(3, 367);
+            this.cmdSend.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cmdSend.Location = new System.Drawing.Point(174, 367);
             this.cmdSend.Name = "cmdSend";
-            this.cmdSend.Size = new System.Drawing.Size(547, 49);
+            this.cmdSend.Size = new System.Drawing.Size(204, 49);
             this.cmdSend.TabIndex = 0;
             this.cmdSend.Text = "Send";
             this.cmdSend.UseVisualStyleBackColor = true;
             this.cmdSend.Click += new System.EventHandler(this.cmdSend_Click);
-            // 
-            // drawingBox31
-            // 
-            this.drawingBox31.BackColor = System.Drawing.SystemColors.Control;
-            this.drawingBox31.BackgroundImage = global::ComplexChatRoom.Properties.Resources.heavycruiser_enterprise_up1;
-            this.drawingBox31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.drawingBox31.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.drawingBox31.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.drawingBox31.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.drawingBox31.lineColor = System.Drawing.Color.Black;
-            this.drawingBox31.lineWidth = 1;
-            this.drawingBox31.Location = new System.Drawing.Point(3, 3);
-            this.drawingBox31.Name = "drawingBox31";
-            this.drawingBox31.Size = new System.Drawing.Size(547, 358);
-            this.drawingBox31.TabIndex = 1;
             // 
             // tabPage2
             // 
@@ -148,22 +133,31 @@
             this.splitContainer1.SplitterDistance = 431;
             this.splitContainer1.TabIndex = 0;
             // 
-            // vectorBox1
+            // tableLayoutPanel1
             // 
-            this.vectorBox1.BackColor = System.Drawing.Color.Transparent;
-            this.vectorBox1.BackgroundImage = global::ComplexChatRoom.Properties.Resources.heavycruiser_enterprise_up1;
-            this.vectorBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.vectorBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.vectorBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.vectorBox1.Location = new System.Drawing.Point(0, 0);
-            this.vectorBox1.Name = "vectorBox1";
-            this.vectorBox1.pathBounds = new System.Drawing.Rectangle(0, 0, 0, 0);
-            this.vectorBox1.pathHeight = 0;
-            this.vectorBox1.Paths = null;
-            this.vectorBox1.pathWidth = 0;
-            this.vectorBox1.Size = new System.Drawing.Size(431, 419);
-            this.vectorBox1.TabIndex = 0;
-            this.vectorBox1.Load += new System.EventHandler(this.vectorBox1_Load);
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.cmdCopy, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lstMessages, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(118, 419);
+            this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // cmdCopy
+            // 
+            this.cmdCopy.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cmdCopy.Location = new System.Drawing.Point(3, 393);
+            this.cmdCopy.Name = "cmdCopy";
+            this.cmdCopy.Size = new System.Drawing.Size(112, 23);
+            this.cmdCopy.TabIndex = 1;
+            this.cmdCopy.Text = "CopyTo";
+            this.cmdCopy.UseVisualStyleBackColor = true;
+            this.cmdCopy.Click += new System.EventHandler(this.cmdCopy_Click);
             // 
             // lstMessages
             // 
@@ -186,38 +180,44 @@
             this.notifyIcon1.BalloonTipClicked += new System.EventHandler(this.notifyIcon1_BalloonTipClicked);
             this.notifyIcon1.Click += new System.EventHandler(this.notifyIcon1_BalloonTipClicked);
             // 
-            // cmdCopy
+            // drawingBox31
             // 
-            this.cmdCopy.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cmdCopy.Location = new System.Drawing.Point(3, 393);
-            this.cmdCopy.Name = "cmdCopy";
-            this.cmdCopy.Size = new System.Drawing.Size(112, 23);
-            this.cmdCopy.TabIndex = 1;
-            this.cmdCopy.Text = "CopyTo";
-            this.cmdCopy.UseVisualStyleBackColor = true;
-            this.cmdCopy.Click += new System.EventHandler(this.cmdCopy_Click);
+            this.drawingBox31.BackColor = System.Drawing.SystemColors.Control;
+            this.drawingBox31.BackgroundImage = global::ComplexChatRoom.Properties.Resources.heavycruiser_enterprise_up1;
+            this.drawingBox31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.drawingBox31.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.drawingBox31.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.drawingBox31.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.drawingBox31.lineColor = System.Drawing.Color.Black;
+            this.drawingBox31.lines = ((System.Collections.Generic.List<DrawingBox.PathData>)(resources.GetObject("drawingBox31.lines")));
+            this.drawingBox31.lineWidth = 1;
+            this.drawingBox31.Location = new System.Drawing.Point(3, 3);
+            this.drawingBox31.Name = "drawingBox31";
+            this.drawingBox31.Size = new System.Drawing.Size(547, 358);
+            this.drawingBox31.TabIndex = 1;
             // 
-            // tableLayoutPanel1
+            // vectorBox1
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.cmdCopy, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lstMessages, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(118, 419);
-            this.tableLayoutPanel1.TabIndex = 2;
+            this.vectorBox1.BackColor = System.Drawing.Color.Transparent;
+            this.vectorBox1.BackgroundImage = global::ComplexChatRoom.Properties.Resources.heavycruiser_enterprise_up1;
+            this.vectorBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.vectorBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.vectorBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.vectorBox1.Location = new System.Drawing.Point(0, 0);
+            this.vectorBox1.Name = "vectorBox1";
+            this.vectorBox1.pathBounds = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.vectorBox1.pathHeight = 0;
+            this.vectorBox1.Paths = null;
+            this.vectorBox1.pathWidth = 0;
+            this.vectorBox1.Size = new System.Drawing.Size(431, 419);
+            this.vectorBox1.TabIndex = 0;
+            this.vectorBox1.Load += new System.EventHandler(this.vectorBox1_Load);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(567, 483);
-            this.Visible = false;
             this.Controls.Add(this.tabPages);
             this.Name = "Form1";
             this.Text = "Form1";

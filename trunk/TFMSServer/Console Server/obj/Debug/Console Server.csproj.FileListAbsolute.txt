@@ -6,3 +6,11 @@ C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498m
 C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\obj\Debug\Console Server.exe
 C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\obj\Debug\Console Server.pdb
 C:\Documents and Settings\USER1\My Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Debug\Console Server.exe.config
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Debug\Console Server.exe.config
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Debug\Console Server.exe
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Debug\Console Server.pdb
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Debug\TFMSServer.dll
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\bin\Debug\TFMSServer.pdb
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\obj\Debug\Console Server.exe
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\Console Server\obj\Debug\Console Server.pdb
