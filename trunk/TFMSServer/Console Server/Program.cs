@@ -49,6 +49,7 @@ namespace Console_Server
         {
             Console.WriteLine("{0} has requested a list of clients", d.strName);
         }
+
         static void handleRelayRequest(Data d)
         {
             if (d.strMessage.Length>255)
@@ -56,7 +57,7 @@ namespace Console_Server
             else
                 Console.WriteLine("{0} has sent \"{1}\"", d.strName, d.strMessage);
             
-            logMessage(d);
+            //logMessage(d);
         }
 
         static void logMessage(Data d)
