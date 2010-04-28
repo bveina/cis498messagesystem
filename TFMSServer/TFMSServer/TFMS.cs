@@ -138,7 +138,7 @@ namespace TFMS_Space
                 serverSocket.BeginAccept(new AsyncCallback(OnAccept),null);
                 return true;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return false;
             }
@@ -208,7 +208,7 @@ namespace TFMS_Space
                 // parse the bytes and turn it into a Data object (this is a big step!)
                 msgReceived = new Data(temp);
             }
-            catch (SocketException ex)
+            catch (SocketException)
             {
                 //if for any reason shit get messed up boot the client.
                 msgReceived = new Data(Command.Logout, null, getNamefromSocket(clientSocket));
@@ -501,7 +501,7 @@ namespace TFMS_Space
                                        null);
                 return true;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return false;
             }
@@ -594,7 +594,7 @@ namespace TFMS_Space
                 {
                     numBytesReceived = clientSocket.EndReceive(ar);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     disconnectDetected(null);
                     return;
@@ -735,7 +735,7 @@ namespace TFMS_Space
                 }
                 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 this.Clone(new Data(Command.Null, "", "oops"));
                 return ;
