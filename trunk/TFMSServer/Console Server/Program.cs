@@ -24,7 +24,7 @@ namespace Console_Server
                 switch (input)
                 {
                     case "c":
-                        Console.WriteLine("Clients:{0}",myServer.clientList.Count);
+                        Console.WriteLine("Clients: {0}", myServer.clientList.Count);
                         Console.WriteLine("-------------------");
                         foreach (ClientInfo a in myServer.clientList)
                         {
@@ -57,7 +57,7 @@ namespace Console_Server
             else
                 Console.WriteLine("{0} has sent \"{1}\"", d.strName, d.strMessage);
             
-            //logMessage(d);
+            logMessage(d);
         }
 
         static void logMessage(Data d)
@@ -68,13 +68,13 @@ namespace Console_Server
                 SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DBConnect"].ToString());
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("INSERT INTO TFMessage @SENDER @DATE @MESSAGE");
-                cmd.Parameters.AddWithValue("@SENDER", d.strName);
-                cmd.Parameters.AddWithValue("@DATE", d.timeStamp);
-                cmd.Parameters.AddWithValue("@MESSAGE", d.strMessage);
+                SqlCommand cmd = new SqlCommand("INSERT INTO TFMessage (sender, date, message) VALUES (@sent_by, @date, @msg)", conn);
+                cmd.Parameters.AddWithValue("@sent_by", d.strName);
+                cmd.Parameters.AddWithValue("@date", d.timeStamp);
+                cmd.Parameters.AddWithValue("@msg", d.strMessage);
                 cmd.ExecuteNonQuery();
-
                 conn.Close();
+                Console.WriteLine("Logged {0}'s message.", d.strName);
             }
             catch (Exception e)
             {
