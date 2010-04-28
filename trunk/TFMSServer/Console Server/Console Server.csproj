@@ -50,9 +50,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TFMSServer\TFMSServer.csproj">
+    <ProjectReference Include="..\TFMSServer\TFMS_Space.csproj">
       <Project>{66D2F4D8-554A-4F4E-8B42-B4FB018B5E1C}</Project>
-      <Name>TFMSServer</Name>
+      <Name>TFMS_Space</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
