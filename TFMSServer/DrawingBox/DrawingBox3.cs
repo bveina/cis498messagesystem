@@ -7,9 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Collections;
-using System.Xml.Serialization;
 using System.IO;
-using System.Xml;
 using System.Runtime.Serialization.Formatters.Binary;
 
 
@@ -22,12 +20,6 @@ namespace DrawingBox
     /// </summary>
     public partial class DrawingBox3 : UserControl
     {
-        /// <summary>
-        /// not implemented yet.
-        /// currently serialization is done using BinaryFormatter. sometimes is it desirable to see the data as xml.
-        /// in future if xml serialization can be achieved this would be a simple way to switch back and forth.
-        /// </summary>
-        private const bool useXML = false;
         /// <summary>
         /// preset for Size of Large brush.
         /// </summary>
@@ -65,9 +57,9 @@ namespace DrawingBox
         /// </summary>
         private int myWidth;
         /// <summary>
-        /// the mode we are in, either drawing or erasing
+        /// the mode we are in, either erasing or not (erasing or drawing)
         /// </summary>
-        private bool eraseMode, drawingMode;
+        private bool eraseMode;
 
         /// <summary>
         /// the color that is currently selected
@@ -145,28 +137,13 @@ namespace DrawingBox
         /// <returns>a string representation of the image</returns>
         public string serialize()
         {
-            if (useXML)
+            using (MemoryStream ms = new MemoryStream())
             {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    XmlSerializer xser = new XmlSerializer(typeof(List<PathData>));
-                    xser.Serialize(ms, myPaths);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    //string result = Convert.ToBase64String(ms.GetBuffer());
-                    string result = System.Text.Encoding.UTF8.GetString(ms.ToArray());
-                    return string.Format("{0},{1},{2}", this.ClientRectangle.Width, this.ClientRectangle.Height - this.toolStrip1.Height, result);
-                }
-            }
-            else// currently this is the only way to serialize the thing due to complications with the Graphics path....
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    BinaryFormatter xser = new BinaryFormatter();
-                    xser.Serialize(ms, myPaths);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    string result = Convert.ToBase64String(ms.GetBuffer());
-                    return string.Format("{0},{1},{2}", this.ClientRectangle.Width, this.ClientRectangle.Height - this.toolStrip1.Height, result);
-                }
+                BinaryFormatter xser = new BinaryFormatter();
+                xser.Serialize(ms, myPaths);
+                ms.Seek(0, SeekOrigin.Begin);
+                string result = Convert.ToBase64String(ms.GetBuffer());
+                return string.Format("{0},{1},{2}", this.ClientRectangle.Width, this.ClientRectangle.Height - this.toolStrip1.Height, result);
             }
         }
 
@@ -174,7 +151,6 @@ namespace DrawingBox
         {
             currentPath = new PathData(new GraphicsPath(), myColor, myWidth);
             myPaths = new List<PathData>();
-            drawingMode = true;
             eraseMode = false;
             cmdDraw.Checked = true;
             cmdSizeTiny.Checked = true;
@@ -191,13 +167,11 @@ namespace DrawingBox
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             cmdErase.Checked = false;
-            drawingMode = true;
             eraseMode = false;
         }
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             cmdDraw.Checked = false;
-            drawingMode = false;
             eraseMode = true;
         }
         private void toolStripButton3_Click(object sender, EventArgs e)
