@@ -15,13 +15,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ComplexChatRoom
 {
-    public partial class Form1 : Form
+    public partial class TFMS_GUI : Form
     {
         string name;
         string serverAddress;
         int serverPort;
         TFMSClient myClient;
-        public Form1()
+        public TFMS_GUI()
         {
             InitializeComponent();
         }

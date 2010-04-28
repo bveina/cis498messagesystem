@@ -8,7 +8,7 @@ using System.Configuration;
 
 namespace Console_Server
 {
-    class Program
+    class TFMS_Server
     {
         static void Main(string[] args)
         {
