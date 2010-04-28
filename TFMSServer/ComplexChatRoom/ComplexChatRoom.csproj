@@ -110,9 +110,9 @@
       <Project>{DCCA24BB-51D4-485B-B429-7B2CA8421341}</Project>
       <Name>DrawingBox</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TFMSServer\TFMSServer.csproj">
+    <ProjectReference Include="..\TFMSServer\TFMS_Space.csproj">
       <Project>{66D2F4D8-554A-4F4E-8B42-B4FB018B5E1C}</Project>
-      <Name>TFMSServer</Name>
+      <Name>TFMS_Space</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
