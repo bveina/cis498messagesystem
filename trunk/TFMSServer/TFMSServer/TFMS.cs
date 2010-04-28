@@ -26,7 +26,6 @@ namespace TFMS_Space
     {
         public const int delayTime = 100;
         public const long buffSize = 1024;
-        public const bool useXML = false;
     }
 
     /// <summary>
@@ -768,7 +767,6 @@ namespace TFMS_Space
             {
                 XmlSerializer xser = new XmlSerializer(typeof(Data));
                 xser.Serialize(ms, this);
-                //ms.Seek(0, SeekOrigin.Begin); // TODO: i think this can be removed but im to scared to do it atm (12-04-2009)
                 return ms.GetBuffer();
             }
         }

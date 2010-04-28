@@ -7,10 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using TFMS_Space;
-using System.Xml.Serialization;
 using System.Drawing.Drawing2D;
 using System.IO;
-using System.Xml;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ComplexChatRoom
@@ -132,23 +130,12 @@ namespace ComplexChatRoom
                 string[] items = mystr.Split(',');
                 string hash = items[2];
 
-                if (TFMSConsts.useXML)
+
+                using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(hash)))
                 {
-                    using (MemoryStream ms = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(hash)))
-                    {
-                        XmlSerializer xs = new XmlSerializer(typeof(List<DrawingBox.PathData>));
-                        myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
-                        ms.Close();
-                    }
-                }
-                else
-                {
-                    using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(hash)))
-                    {
-                        BinaryFormatter xs = new BinaryFormatter();
-                        myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
-                        ms.Close();
-                    }
+                    BinaryFormatter xs = new BinaryFormatter();
+                    myPaths = (List<DrawingBox.PathData>)xs.Deserialize(ms);
+                    ms.Close();
                 }
                 
 
