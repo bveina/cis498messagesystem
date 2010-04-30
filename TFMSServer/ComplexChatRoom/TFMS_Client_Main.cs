@@ -8,7 +8,8 @@ namespace ComplexChatRoom
     static class TFMS_Client_Main
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// The TFMS_Client_Main class provides one of the Main methods for running the TFMS program
+        /// TFMS_Client_Main starts a TFMS_GUI, which allows a user to log in to the system
         /// </summary>
         [STAThread]
         static void Main()
