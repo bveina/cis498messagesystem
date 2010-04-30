@@ -48,11 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drawingbox2.cs">
+    <Compile Include="AckDrawingBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Drawingbox2.Designer.cs">
-      <DependentUpon>Drawingbox2.cs</DependentUpon>
+    <Compile Include="AckDrawingBox.Designer.cs">
+      <DependentUpon>AckDrawingBox.cs</DependentUpon>
     </Compile>
     <Compile Include="ClientDrawingBox.cs">
       <SubType>UserControl</SubType>
@@ -76,9 +76,9 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Drawingbox2.resx">
+    <EmbeddedResource Include="AckDrawingBox.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>Drawingbox2.cs</DependentUpon>
+      <DependentUpon>AckDrawingBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ClientDrawingBox.resx">
       <SubType>Designer</SubType>
