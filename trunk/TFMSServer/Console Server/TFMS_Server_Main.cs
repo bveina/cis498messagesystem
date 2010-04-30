@@ -42,11 +42,11 @@ namespace Console_Server
         }
         static void handleLoginRequest(TFMS_Data d)
         {
-            Console.WriteLine("{0} is trying to login", d.strName);
+            Console.WriteLine("{0} is logging in", d.strName);
         }
         static void handleLogoffRequest(TFMS_Data d)
         {
-            Console.WriteLine("{0} is trying to logoff", d.strName);
+            Console.WriteLine("{0} is logging off", d.strName);
         }
         static void handleListRequest(TFMS_Data d)
         {
