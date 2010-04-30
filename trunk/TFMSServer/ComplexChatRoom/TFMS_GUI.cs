@@ -18,7 +18,7 @@ namespace ComplexChatRoom
         string name;
         string serverAddress;
         int serverPort;
-        TFMSClient myClient;
+        TFMS_Client myClient;
         public TFMS_GUI()
         {
             InitializeComponent();
@@ -37,12 +37,12 @@ namespace ComplexChatRoom
                     name = login.name;
                     serverAddress = login.serverAddr;
                     serverPort = int.Parse(login.serverPort);
-                    myClient = new TFMSClient(serverPort, name);
-                    myClient.loginReceived += new MessageRecieved(handleLogon);
-                    myClient.logoffReceived += new MessageRecieved(handleLogoff);
-                    myClient.listReceived += new MessageRecieved(handleList);
-                    myClient.dataReceived += new MessageRecieved(handleMessage);
-                    myClient.disconnectDetected += new MessageRecieved(myClient_disconnectDetected);
+                    myClient = new TFMS_Client(serverPort, name);
+                    myClient.loginReceived += new TFMS_MessageRecieved(handleLogon);
+                    myClient.logoffReceived += new TFMS_MessageRecieved(handleLogoff);
+                    myClient.listReceived += new TFMS_MessageRecieved(handleList);
+                    myClient.dataReceived += new TFMS_MessageRecieved(handleMessage);
+                    myClient.disconnectDetected += new TFMS_MessageRecieved(myClient_disconnectDetected);
                 }
                 else if (r == DialogResult.Cancel)
                 {
@@ -64,24 +64,24 @@ namespace ComplexChatRoom
         }
 
         #region message handling routines
-        void myClient_disconnectDetected(Data dataReceived)
+        void myClient_disconnectDetected(TFMS_Data dataReceived)
         {
             //this.Close();
             myClient = null;
             MessageBox.Show("The server has probably blown up. We will now exit", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Application.Exit();
         }
-        void handleLogon(Data msg)
+        void handleLogon(TFMS_Data msg)
         {
             notifyIcon1.BalloonTipText = string.Format("{0} has joined", msg.strName);
             notifyIcon1.ShowBalloonTip(500);
         }
-        void handleLogoff(Data msg)
+        void handleLogoff(TFMS_Data msg)
         {
             notifyIcon1.BalloonTipText = string.Format("{0} has left", msg.strName);
             notifyIcon1.ShowBalloonTip(500);
         }
-        void handleMessage(Data msg)
+        void handleMessage(TFMS_Data msg)
         {
 
             notifyIcon1.Visible = true;
@@ -89,11 +89,11 @@ namespace ComplexChatRoom
             notifyIcon1.ShowBalloonTip(5000);
             // make the call to add an item thread safe because chances are that this will be called from another thread
             if (lstMessages.InvokeRequired) 
-                lstMessages.Invoke(new Action<Data>(delegate(Data a) { lstMessages.Items.Add(a); }), msg);
+                lstMessages.Invoke(new Action<TFMS_Data>(delegate(TFMS_Data a) { lstMessages.Items.Add(a); }), msg);
             else
                 lstMessages.Items.Add(msg);
         }
-        void handleList(Data msg)
+        void handleList(TFMS_Data msg)
         {
             notifyIcon1.ShowBalloonTip(500, "List", "you got the list of peers", ToolTipIcon.Info);
         }
@@ -124,7 +124,7 @@ namespace ComplexChatRoom
             try
             {
                 List<DrawingBox.PathData> myPaths;
-                Data myData = (Data)lstMessages.SelectedItem;
+                TFMS_Data myData = (TFMS_Data)lstMessages.SelectedItem;
                 myData.acknowledged = true;
                 string mystr = myData.strMessage;
                 string[] items = mystr.Split(',');
@@ -168,7 +168,7 @@ namespace ComplexChatRoom
         /// <summary>this handles the custom drawing of the individual items on the list box of messages</summary>
         private void lstMessages_DrawItem(object sender, DrawItemEventArgs e)
         {
-            Data tmp = (Data)lstMessages.Items[e.Index];
+            TFMS_Data tmp = (TFMS_Data)lstMessages.Items[e.Index];
             string dispString = string.Format("{0} - {1}", tmp.strName, tmp.timeStamp);
 
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
@@ -185,7 +185,7 @@ namespace ComplexChatRoom
 
                 // Determine the color of the brush to draw each item based 
                 // on the index of the item to draw.
-                myBrush = ((Data)lstMessages.Items[e.Index]).dispColor;
+                myBrush = ((TFMS_Data)lstMessages.Items[e.Index]).dispColor;
 
                 e.Graphics.FillRectangle(myBrush, e.Bounds);
                 // Draw the current item text based on the current Font 

@@ -8,15 +8,15 @@ using System.Configuration;
 
 namespace Console_Server
 {
-    class TFMS_Server
+    class TFMS_Server_Main
     {
         static void Main(string[] args)
         {
-            TFMSServer myServer = new TFMSServer(1000);
-            myServer.ListRequested += new MessageRecieved(handleListRequest);
-            myServer.logonRequested += new MessageRecieved(handleLoginRequest);
-            myServer.logoffRequested += new MessageRecieved(handleLogoffRequest);
-            myServer.RelayRequested += new MessageRecieved(handleRelayRequest);
+            TFMS_Server myServer = new TFMS_Server(1000);
+            myServer.listRequested += new TFMS_MessageRecieved(handleListRequest);
+            myServer.logonRequested += new TFMS_MessageRecieved(handleLoginRequest);
+            myServer.logoffRequested += new TFMS_MessageRecieved(handleLogoffRequest);
+            myServer.relayRequested += new TFMS_MessageRecieved(handleRelayRequest);
             myServer.startServer();
             string input = Console.ReadLine();
             while (input != "x")
@@ -26,7 +26,7 @@ namespace Console_Server
                     case "c":
                         Console.WriteLine("Clients: {0}", myServer.clientList.Count);
                         Console.WriteLine("-------------------");
-                        foreach (ClientInfo a in myServer.clientList)
+                        foreach (TFMS_ClientInfo a in myServer.clientList)
                         {
                             Console.WriteLine("{0}",a.strName);
                         } 
@@ -37,31 +37,35 @@ namespace Console_Server
                 input = Console.ReadLine();
             }
         }
-        static void handleLoginRequest(Data d)
+        static void handleLoginRequest(TFMS_Data d)
         {
             Console.WriteLine("{0} is trying to login", d.strName);
         }
-        static void handleLogoffRequest(Data d)
+        static void handleLogoffRequest(TFMS_Data d)
         {
             Console.WriteLine("{0} is trying to logoff", d.strName);
         }
-        static void handleListRequest(Data d)
+        static void handleListRequest(TFMS_Data d)
         {
             Console.WriteLine("{0} has requested a list of clients", d.strName);
         }
 
-        static void handleRelayRequest(Data d)
+        static void handleRelayRequest(TFMS_Data d)
         {
-            if (d.strMessage.Length>255)
-                Console.WriteLine("{0} has sent a long message", d.strName );
-            else
-                Console.WriteLine("{0} has sent \"{1}\"", d.strName, d.strMessage);
+            Console.WriteLine("{0} has sent a message", d.strName);
+
+//            if (d.strMessage.Length>255)
+//                Console.WriteLine("{0} has sent a long message", d.strName );
+//            else
+//                Console.WriteLine("{0} has sent \"{1}\"", d.strName, d.strMessage);
             
-            logMessage(d);
+            //logMessage(d);
         }
 
-        static void logMessage(Data d)
+        static void logMessage(TFMS_Data d)
         {
+            Console.WriteLine("Logging {0}'s message to database", d.strName);
+
             //Log the message to the sql database
             try
             {

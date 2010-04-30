@@ -11,33 +11,38 @@ using System.Xml.Serialization;
 using System.Drawing;
 using System.Threading;
 
-/*/
- * credit to:A Chat Application Using Asynchronous TCP Sockets by Hitesh Sharma for orignal implementation
- * code has now been reworked into a more modular format for general use.
-/*/
+/************************************************************************
+ * Adapted from: "A Chat Application using Asynchronous TCP Sockets"    *
+ * Author: Hitesh Sharma                                                *
+ * URL: http://www.codeproject.com/KB/IP/ChatAsynchTCPSockets.aspx      *
+ ************************************************************************/
 
 
+/// <summary>
+/// contains class definitions for:
+/// - TFMS
+/// </summary>
 namespace TFMS_Space
 {
     /// <summary>
     /// holds list of constants used in both the client and server classes
     /// </summary>
-    public class TFMSConsts
+    public class TFMS_Constants
     {
         public const int delayTime = 100;
         public const long buffSize = 1024;
     }
 
     /// <summary>
-    /// definition of the delegate that handles different types of messages
+    /// defines the delegate that handles different types of messages
     /// </summary>
-    /// <param name="dataReceived"> this is the message that has been received with all its data</param>
-    public delegate void MessageRecieved(Data dataReceived);
+    /// <param name="dataReceived">data from the received message</param>
+    public delegate void TFMS_MessageRecieved(TFMS_Data dataReceived);
 
     /// <summary>
-    /// this handles all information pertaining to a person connected to the server
+    /// contains all information about a person connected to the server
     /// </summary>
-    public class ClientInfo
+    public class TFMS_ClientInfo
     {
         /// <summary>
         /// the physical socket used to comunicate with the client
@@ -57,7 +62,7 @@ namespace TFMS_Space
         /// </summary>
         /// <param name="a">the socket to associate with this client</param>
         /// <param name="b">the name given by the client</param>
-        public ClientInfo(Socket a, string b)
+        public TFMS_ClientInfo(Socket a, string b)
         {
             socket = a;
             strName = b;
@@ -71,51 +76,55 @@ namespace TFMS_Space
     /// - assigning delegate functions to handle messages
     /// - starting the server.
     /// </summary>
-    public class TFMSServer
+    public class TFMS_Server
     {
         /// <summary>
         /// this holds all the info about connected clients see definition for ClientInfo
         /// </summary>
-        public List<ClientInfo> clientList;
+        public List<TFMS_ClientInfo> clientList;
+
         /// <summary>
         /// the socket that listens for new clients
         /// </summary>
-        Socket serverSocket; 
+        Socket serverSocket;
+
         /// <summary>
         /// this is the buffer for receiving connect requests
         /// </summary>
         byte[] byteData;
+
         /// <summary>
         /// this is the port that the server listens on for incoming connections
         /// (individual clients get their own port numbers
         /// </summary>
         public int listenPort;
 
-        #region event delegates
-        // pretty self explainitory
-        //TODO: only one delegate that hadles all options (including ones we havent thought of yet
-        public MessageRecieved logonRequested;
-        public MessageRecieved logoffRequested;
-        public MessageRecieved RelayRequested;
-        public MessageRecieved ListRequested;
-        #endregion
+        /// <summary>
+        /// 
+        /// </summary>
+        public TFMS_MessageRecieved logonRequested;
+        public TFMS_MessageRecieved logoffRequested;
+        public TFMS_MessageRecieved relayRequested;
+        public TFMS_MessageRecieved listRequested;
+
+
         #region constructors
         /// <summary>
         /// creates a server that will listen on the default port of 1000
         /// TODO: make 1000 into a constant in TFMS_Consts
         /// </summary>
-        public TFMSServer()
+        public TFMS_Server()
             : this(1000)
         { }
         /// <summary>
         /// creates a server that will listen for clients
         /// </summary>
         /// <param name="port">the port to listen on</param>
-        public TFMSServer(int port)
+        public TFMS_Server(int port)
         {
             listenPort = port;
-            byteData = new byte[TFMSConsts.buffSize];
-            clientList = new List<ClientInfo>();
+            byteData = new byte[TFMS_Constants.buffSize];
+            clientList = new List<TFMS_ClientInfo>();
         }
         #endregion
         #region basic server tasks
@@ -171,10 +180,10 @@ namespace TFMS_Space
         private void OnReceive(IAsyncResult ar)
         {
             while (!ar.IsCompleted) Thread.Sleep(100);//TODO: remove this. its pointless.
-            long buffSize = TFMSConsts.buffSize; // assume we will have the default buffer size
+            long buffSize = TFMS_Constants.buffSize; // assume we will have the default buffer size
             Socket clientSocket = (Socket)ar.AsyncState;     // get the socket that received data
 
-            ClientInfo CI = null;
+            TFMS_ClientInfo CI = null;
             #region get ClientInfo based on clientSocket
             // attempt to find the ClientInfo related to the socket
             // if there is no client info CI will be null
@@ -188,7 +197,7 @@ namespace TFMS_Space
 
             //attempt to get the data and convert it into data.
             #region get Data message from socket
-            Data msgReceived;
+            TFMS_Data msgReceived;
             try
             {
                 int numBytesReceived = clientSocket.EndReceive(ar); // End receive tells you how many bytes were received
@@ -205,17 +214,17 @@ namespace TFMS_Space
                     Array.Copy(CI.buffer, temp, numBytesReceived);
                 }
                 // parse the bytes and turn it into a Data object (this is a big step!)
-                msgReceived = new Data(temp);
+                msgReceived = new TFMS_Data(temp);
             }
             catch (SocketException)
             {
                 //if for any reason shit get messed up boot the client.
-                msgReceived = new Data(Command.Logout, null, getNamefromSocket(clientSocket));
+                msgReceived = new TFMS_Data(TFMS_Command.Logout, null, getNamefromSocket(clientSocket));
             }
             #endregion
 
             #region generate message to send to clients
-            Data msgToSend = new Data();
+            TFMS_Data msgToSend = new TFMS_Data();
             msgToSend.cmdCommand = msgReceived.cmdCommand; // echo the command
             msgToSend.strName = msgReceived.strName;       // echo the name of the client
             #endregion
@@ -229,12 +238,12 @@ namespace TFMS_Space
             //messageReceived(Data);
             switch (msgReceived.cmdCommand)
             {
-                case Command.Login:
+                case TFMS_Command.Login:
                     #region handle Login
                     logonRequested(msgReceived); // tell the user of the class we have received a logon
                     
                     //When a user logs in to the server then we add her to our list of clients                    
-                    ClientInfo clientInfo = new ClientInfo(clientSocket, msgReceived.strName);
+                    TFMS_ClientInfo clientInfo = new TFMS_ClientInfo(clientSocket, msgReceived.strName);
                     clientList.Add(clientInfo);
 
                     Console.WriteLine("received login from:{0}", getNamefromSocket(clientSocket));
@@ -242,11 +251,11 @@ namespace TFMS_Space
                     // let the client program handle how to deal with it.
                     // the command and strName have been filled above.
                     msgToSend.strMessage = msgReceived.strName;
-                    clientInfo.buffer = new byte[TFMSConsts.buffSize]; // dimension the clients buffer.
+                    clientInfo.buffer = new byte[TFMS_Constants.buffSize]; // dimension the clients buffer.
                     CI = clientInfo; // CI would not have been found before since its not in the clientList so just add it now
                     #endregion
                     break;
-                case Command.Logout:
+                case TFMS_Command.Logout:
                     #region handle Logout
                     logoffRequested(msgReceived); // tell the user of the class we have received a logon
                     Console.WriteLine("Received Logout from:{0}", getNamefromSocket(clientSocket));
@@ -260,9 +269,9 @@ namespace TFMS_Space
                     msgToSend.strMessage = msgReceived.strName;
                     #endregion
                     break;
-                case Command.List:
+                case TFMS_Command.List:
                     #region handle List
-                    ListRequested(msgReceived); // tell the user of the class we have received a List Request
+                    listRequested(msgReceived); // tell the user of the class we have received a List Request
                     Console.WriteLine("Receved List Rq from:{0}", getNamefromSocket(clientSocket));
 
                     msgToSend = GetClientListMessage(); // helper function generates the message for us
@@ -270,21 +279,21 @@ namespace TFMS_Space
                     // since its not being brodcast to the whole chatroom 
                     // we send it here inside the case block
                     sendTFMSmsg(msgToSend, clientSocket, new AsyncCallback(OnSend));
-                    buffSize = TFMSConsts.buffSize;
+                    buffSize = TFMS_Constants.buffSize;
                     #endregion
                     break;
-                case Command.Message:
+                case TFMS_Command.Message:
                     #region handle Message
-                    RelayRequested(msgReceived); // tell the user of the class we have received a Message that must be Relayed
+                    relayRequested(msgReceived); // tell the user of the class we have received a Message that must be Relayed
                     Console.WriteLine("Received Message from:{0} size=({1})", getNamefromSocket(clientSocket), CI.buffer.Length);
                     // copy the message to the "message To be Sent"
                     msgToSend.strMessage = msgReceived.strMessage;
                     #endregion
                     break;
-                case Command.MsgLen:
+                case TFMS_Command.MsgLen:
                     #region handle MsgLen
                     // all we have to do here is resize the buffer for the incoming HUGE message
-                    buffSize = int.Parse(msgReceived.strMessage)+TFMSConsts.buffSize; // padds the size by a constant (probably not neccasarry) remove before release
+                    buffSize = int.Parse(msgReceived.strMessage)+TFMS_Constants.buffSize; // padds the size by a constant (probably not neccasarry) remove before release
                     Console.WriteLine("Received MsgLen:{0} from:{1}", buffSize, getNamefromSocket(clientSocket));
                     CI.buffer=new byte[ buffSize];
                     #endregion
@@ -302,9 +311,9 @@ namespace TFMS_Space
             #region rebrodcast message as needed
             //List messages are only sent to one recipient so dont forward them
             //MsgLen messages are not resent to anyone so likewise they are not forwarded to anyone.
-            if (msgToSend.cmdCommand != Command.List && msgToSend.cmdCommand != Command.MsgLen)
+            if (msgToSend.cmdCommand != TFMS_Command.List && msgToSend.cmdCommand != TFMS_Command.MsgLen)
             {
-                foreach (ClientInfo c in clientList)
+                foreach (TFMS_ClientInfo c in clientList)
                 {
                     //if (c.socket != clientSocket) //dont send to yourself 
                     //{
@@ -317,7 +326,7 @@ namespace TFMS_Space
             #region start receving again
             //after dealing with the message we need to keep listening for the NEXT message
             // unless the message was logout.
-            if (msgReceived.cmdCommand != Command.Logout)
+            if (msgReceived.cmdCommand != TFMS_Command.Logout)
             {
                 Console.WriteLine("Waiting for data from :{0} receiveLen={1}", getNamefromSocket(clientSocket),byteData.Length);
                 clientSocket.BeginReceive(CI.buffer, 0, CI.buffer.Length, SocketFlags.None, new AsyncCallback(OnReceive), clientSocket);
@@ -345,15 +354,15 @@ namespace TFMS_Space
         /// <param name="s">the socket corrisponding to the user you want to send to</param>
         /// <param name="snd">the function that will be called when the send is complete (typicaly "OnSend")</param>
         /// <returns></returns>
-        public IAsyncResult sendTFMSmsg(Data d, Socket s, AsyncCallback snd)
+        public IAsyncResult sendTFMSmsg(TFMS_Data d, Socket s, AsyncCallback snd)
         {
             byte[] message = d.ToByte(); // messages must be sent as Arrays of bytes
             //if (message.Length >= TFMSConsts.buffSize)
             //{
                 Console.WriteLine("sending length: {0}", message.Length);
                 // syncronously send the length of the actual message and block until the message has been sent.
-                s.Send(new Data(Command.MsgLen, string.Format("{0}", message.Length), d.strName).ToByte()); 
-                Thread.Sleep(TFMSConsts.delayTime); // saftey delay, should be removed before release
+                s.Send(new TFMS_Data(TFMS_Command.MsgLen, string.Format("{0}", message.Length), d.strName).ToByte()); 
+                Thread.Sleep(TFMS_Constants.delayTime); // saftey delay, should be removed before release
             //}
             Console.WriteLine("BeginSend:{0} msg",d.cmdCommand);
             return s.BeginSend(message, 0, message.Length, SocketFlags.None, snd, s); // the async call to Send the message
@@ -365,10 +374,10 @@ namespace TFMS_Space
         /// Currently it is one string with "*" delimited names
         /// </summary>
         /// <returns>a Data object with strMessage filled and Cmd=List but no name attached.</returns>
-        public Data GetClientListMessage()
+        public TFMS_Data GetClientListMessage()
         {
-            Data msgToSend = new Data(Command.List, null, null);
-            foreach (ClientInfo c in clientList)
+            TFMS_Data msgToSend = new TFMS_Data(TFMS_Command.List, null, null);
+            foreach (TFMS_ClientInfo c in clientList)
             {
                 // use a * as delimiter
                 msgToSend.strMessage += c.strName + "*";
@@ -382,11 +391,11 @@ namespace TFMS_Space
         /// <param name="s">the socket you are searching for</param>
         /// <returns>if lst contains a client with socket ==s the index of that client
         /// else -1</returns>
-        public int findIndexFromClient(List<ClientInfo> lst, Socket s)
+        public int findIndexFromClient(List<TFMS_ClientInfo> lst, Socket s)
         {
             // simple linear search. runs in O(n) time
             int nIndex = 0;
-            foreach (ClientInfo client in lst)
+            foreach (TFMS_ClientInfo client in lst)
             {
                 if (client.socket == s)
                     return nIndex;
@@ -414,7 +423,7 @@ namespace TFMS_Space
     /// <summary>
     /// this class encapsulates all the background stuff for a client program.
     /// </summary>
-    public class TFMSClient
+    public class TFMS_Client
     {
         /// <summary>
         /// the port to try to contact the server on.
@@ -439,18 +448,18 @@ namespace TFMS_Space
 
         #region event delegates
         //TODO: only implement one delegate that will handle all message types including ones yet to be implemented.
-        public event MessageRecieved loginReceived;
-        public event MessageRecieved logoffReceived;
-        public event MessageRecieved dataReceived;
-        public event MessageRecieved listReceived;
-        public event MessageRecieved disconnectDetected;
+        public event TFMS_MessageRecieved loginReceived;
+        public event TFMS_MessageRecieved logoffReceived;
+        public event TFMS_MessageRecieved dataReceived;
+        public event TFMS_MessageRecieved listReceived;
+        public event TFMS_MessageRecieved disconnectDetected;
         #endregion
         #region contructors
         /// <summary>
         /// default constructor with bogus values.
         /// you should never call this directly
         /// </summary>
-        public TFMSClient()
+        public TFMS_Client()
             :this(1000,"Jon Doe")
         {}
         /// <summary>
@@ -458,12 +467,12 @@ namespace TFMS_Space
         /// </summary>
         /// <param name="port">the port to initiate contact with the server on. (0-65535)</param>
         /// <param name="Name">the name you want to use to comunicate</param>
-        public TFMSClient(int port, string Name)
+        public TFMS_Client(int port, string Name)
         {
             serverPort = port;
             clientSocket = null;
             strName = Name;
-            byteData = new byte[TFMSConsts.buffSize];
+            byteData = new byte[TFMS_Constants.buffSize];
         }
         #endregion
         #region basic command tasks
@@ -484,12 +493,12 @@ namespace TFMS_Space
                 clientSocket.Connect(ipEnd);
 
                 //immediately try to login after connect
-                Data msgToSend = new Data(Command.Login, null, strName);
+                TFMS_Data msgToSend = new TFMS_Data(TFMS_Command.Login, null, strName);
                 lastMessage= msgToSend.ToString();
                 clientSocket.Send(msgToSend.ToByte());
 
                 //setup buffer to receive data from the server.
-                byteData = new byte[TFMSConsts.buffSize];
+                byteData = new byte[TFMS_Constants.buffSize];
 
                 //Start listening to the data asynchronously
                 clientSocket.BeginReceive(byteData,
@@ -512,7 +521,7 @@ namespace TFMS_Space
         /// </summary>
         public void disconnect()
         {
-            Data msgToSend = new Data(Command.Logout, null, strName);
+            TFMS_Data msgToSend = new TFMS_Data(TFMS_Command.Logout, null, strName);
             byte[] data = msgToSend.ToByte();
             lastMessage= msgToSend.ToString();
             clientSocket.Send(data);
@@ -523,14 +532,14 @@ namespace TFMS_Space
         /// </summary>
         public void getList()
         {
-            Data msgToSend = new Data(Command.List,null,strName);
+            TFMS_Data msgToSend = new TFMS_Data(TFMS_Command.List,null,strName);
             byte[] data = msgToSend.ToByte();
             //if (data.Length >= TFMSConsts.buffSize)
             //{
-                Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", data.Length), strName);
+                TFMS_Data lenToSend = new TFMS_Data(TFMS_Command.MsgLen, string.Format("{0}", data.Length), strName);
                 lastMessage= lenToSend.ToString();
                 clientSocket.Send(lenToSend.ToByte());
-                Thread.Sleep(TFMSConsts.delayTime );
+                Thread.Sleep(TFMS_Constants.delayTime );
             //}
             lastMessage= msgToSend.ToString();
             clientSocket.BeginSend(data,0,data.Length,SocketFlags.None,new AsyncCallback(OnSend),null);
@@ -542,15 +551,15 @@ namespace TFMS_Space
         /// <param name="data">the string that will be relayed to other clients</param>
         public void sendMessage(string data)
         {
-            Data msgToSend = new Data(Command.Message, data, strName);
+            TFMS_Data msgToSend = new TFMS_Data(TFMS_Command.Message, data, strName);
             byte[] d = msgToSend.ToByte();
             lastMessage=msgToSend.ToString();
             //if (d.Length >= TFMSConsts.buffSize)
             //{
-                Data lenToSend = new Data(Command.MsgLen, string.Format("{0}", d.Length), strName);
+                TFMS_Data lenToSend = new TFMS_Data(TFMS_Command.MsgLen, string.Format("{0}", d.Length), strName);
                 lastMessage= lenToSend.ToString();
                 clientSocket.Send(lenToSend.ToByte());
-                Thread.Sleep(TFMSConsts.delayTime);
+                Thread.Sleep(TFMS_Constants.delayTime);
             //}
             lastMessage= msgToSend.ToString();
             clientSocket.BeginSend(d, 0, d.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
@@ -581,11 +590,11 @@ namespace TFMS_Space
         /// <param name="ar"></param>
         private void OnReceive(IAsyncResult ar)
         {
-            long bufSize = TFMSConsts.buffSize;// assume default buffer size
+            long bufSize = TFMS_Constants.buffSize;// assume default buffer size
             try
             {
                 int numBytesReceived = 0;
-                Data msgReceived;
+                TFMS_Data msgReceived;
                 #region get size of received message (also detects if server blew up)
                 
                 
@@ -604,39 +613,39 @@ namespace TFMS_Space
                 #region parse bytes into a Data object
                 if (numBytesReceived == 0)
                 {
-                    msgReceived = new Data(Command.Null, "", "");
+                    msgReceived = new TFMS_Data(TFMS_Command.Null, "", "");
                 }
                 else
                 {
                     byte[] temp = new byte[numBytesReceived];
                     Array.Copy(byteData, temp, numBytesReceived);
-                    msgReceived = new Data(temp);
+                    msgReceived = new TFMS_Data(temp);
                 }
                 #endregion
                 //Accordingly process the message received
                 switch (msgReceived.cmdCommand)
                 {
-                    case Command.Login:
+                    case TFMS_Command.Login:
                         loginReceived(msgReceived);
                         break;
 
-                    case Command.Logout:
+                    case TFMS_Command.Logout:
                         logoffReceived(msgReceived);
                         break;
 
-                    case Command.Message:
+                    case TFMS_Command.Message:
                         dataReceived(msgReceived);
                         break;
 
-                    case Command.List:
+                    case TFMS_Command.List:
                         listReceived(msgReceived);
                         break;
-                    case Command.MsgLen: 
+                    case TFMS_Command.MsgLen: 
                         // this is the only place that has to do work in the client class.
                         // everything else is passed on to the programmer using the class
                         bufSize = int.Parse(msgReceived.strMessage);
                         break;
-                    case Command.Null:
+                    case TFMS_Command.Null:
                         break;
                 }
 
@@ -673,7 +682,7 @@ namespace TFMS_Space
     /// The data structure by which the server and the client interact with each other
     /// </summary>
     [Serializable]
-    public class Data
+    public class TFMS_Data
     {
         /// <summary>
         /// the string corrisponding to the moniker of the user who sent the message
@@ -686,7 +695,7 @@ namespace TFMS_Space
         /// <summary>
         /// the enumeration of different things you can do
         /// </summary>
-        public Command cmdCommand;  
+        public TFMS_Command cmdCommand;  
         /// <summary>
         /// this tells the client if you have acknowledged this message
         /// </summary>
@@ -699,8 +708,8 @@ namespace TFMS_Space
         /// <summary>
         /// default Constructor fills the fields with null data
         /// </summary>
-        public Data()
-            :this(Command.Null,null,null)
+        public TFMS_Data()
+            :this(TFMS_Command.Null,null,null)
         { }
 
         /// <summary>
@@ -709,7 +718,7 @@ namespace TFMS_Space
         /// <param name="c">the command type</param>
         /// <param name="msg">the actual message string</param>
         /// <param name="name">the moniker of the sender</param>
-        public Data(Command c,string msg,string name)
+        public TFMS_Data(TFMS_Command c,string msg,string name)
         {
             cmdCommand = c; strMessage = msg; strName = name; acknowledged = false;
             timeStamp = DateTime.Now;
@@ -721,22 +730,22 @@ namespace TFMS_Space
         /// constructor that deserializes an array of bytes formated as xml
         /// </summary>
         /// <param name="data">the byte buffer to be deserialized</param>
-        public Data(byte[] data)
+        public TFMS_Data(byte[] data)
         {
-            Data temp;
+            TFMS_Data temp;
             try
             {
                 using (MemoryStream ms = new MemoryStream(data)) // using actually converts into a try/catch that disposes of ms at the end
                 {
-                    XmlSerializer xser = new XmlSerializer(typeof(Data));
+                    XmlSerializer xser = new XmlSerializer(typeof(TFMS_Data));
                     string tempstr = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
-                    temp = (Data)xser.Deserialize(ms);
+                    temp = (TFMS_Data)xser.Deserialize(ms);
                 }
                 
             }
             catch (Exception)
             {
-                this.Clone(new Data(Command.Null, "", "oops"));
+                this.Clone(new TFMS_Data(TFMS_Command.Null, "", "oops"));
                 return ;
             }
             this.Clone(temp);
@@ -747,7 +756,7 @@ namespace TFMS_Space
         /// does a shallow copy from "d" to "this"
         /// </summary>
         /// <param name="d">the Data you want to duplicate</param>
-        public void Clone(Data d)
+        public void Clone(TFMS_Data d)
         {
             if (d == null) return;
             this.acknowledged = d.acknowledged;
@@ -765,7 +774,7 @@ namespace TFMS_Space
         {
             using (MemoryStream ms = new MemoryStream())
             {
-                XmlSerializer xser = new XmlSerializer(typeof(Data));
+                XmlSerializer xser = new XmlSerializer(typeof(TFMS_Data));
                 xser.Serialize(ms, this);
                 return ms.GetBuffer();
             }
@@ -779,7 +788,7 @@ namespace TFMS_Space
         {
             using (MemoryStream ms = new MemoryStream())
             {
-                XmlSerializer xser = new XmlSerializer(typeof(Data));
+                XmlSerializer xser = new XmlSerializer(typeof(TFMS_Data));
 
                 xser.Serialize(ms, this);
                 return System.Text.Encoding.UTF8.GetString(ms.GetBuffer());
@@ -804,7 +813,7 @@ namespace TFMS_Space
     /// <summary>
     /// The commands for interaction between the server and the client
     /// </summary>
-    public enum Command
+    public enum TFMS_Command
     {
         Login,      //Log into the server
         Logout,     //Logout of the server

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFMS_Space", "TFMSServer\TFMS_Space.csproj", "{66D2F4D8-554A-4F4E-8B42-B4FB018B5E1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console Server", "Console Server\Console Server.csproj", "{AA1E5227-7E60-4C86-A95A-E4A9AA2EA493}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleServer", "Console Server\ConsoleServer.csproj", "{AA1E5227-7E60-4C86-A95A-E4A9AA2EA493}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingBox", "DrawingBox\DrawingBox.csproj", "{DCCA24BB-51D4-485B-B429-7B2CA8421341}"
 EndProject
