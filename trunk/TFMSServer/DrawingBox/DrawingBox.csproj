@@ -125,6 +125,7 @@
     <None Include="Resources\Small Brush.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="DrawingBox.cd" />
     <None Include="Resources\undo_32x32.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
