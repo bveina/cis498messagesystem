@@ -9,15 +9,43 @@ using System.Windows.Forms;
 
 namespace ComplexChatRoom
 {
+    /// <summary>
+    /// The login form that the user encounters when they begin the TFMS program
+    /// </summary>
     public partial class LoginDialog : Form
     {
+        #region LoginDialog class variables
+
+        /// <summary>
+        /// The user name that the user would like to appear as on the system
+        /// </summary>
         public string name;
+
+        /// <summary>
+        /// The server address to attempt to contact
+        /// </summary>
         public string serverAddr;
+
+        /// <summary>
+        /// The server port number to attempt to connect with at the specified IP address
+        /// </summary>
         public string serverPort;
+
+        #endregion
+
+        #region LoginDialog constructors
+
+        /// <summary>
+        /// Simply initializes the component, the Form will take over from here
+        /// </summary>
         public LoginDialog()
         {
             InitializeComponent();
         }
+
+        #endregion
+
+        #region LoginDialog event actions
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -26,5 +54,7 @@ namespace ComplexChatRoom
             serverPort = txtPort.Text;
             DialogResult = DialogResult.OK;
         }
+
+        #endregion
     }
 }
