@@ -14,52 +14,78 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace DrawingBox
 {
     /// <summary>
-    /// this is version 3 of the DrawingBox. this control is used to allow the user to draw easily
-    /// using different sized brushes and colors 
-    /// also it supports erase, unlimited undo, and easy serialization for transmission across any medium.
+    /// ClientDrawingBox is the control used to allow the user to easily draw a Tactical Field Message
+    /// The user can choose pen or eraser, line width, line color, and undo
     /// </summary>
-    public partial class DrawingBox3 : UserControl
+    public partial class ClientDrawingBox : UserControl
     {
+        #region ClientDrawingBox class variables
+
         /// <summary>
-        /// preset for Size of Large brush.
+        /// Default width of a large brush
         /// </summary>
         private int BigSize = 10;
+
         /// <summary>
-        /// preset for Size of Medium brush.
+        /// Default width of a medium brush
         /// </summary>
         private int MedSize = 4;
+        
         /// <summary>
-        /// preset for Size of Small brush.
+        /// Default width of a small brush
         /// </summary>
         private int SmlSize = 1;
+
         /// <summary>
-        /// all lines are treated as vectors for easy scaling. each line is encapsulated as a PathData (see below)
-        /// </summary>
-        private List<PathData> myPaths;
-        /// <summary>
-        /// not used should be removed from code.
-        /// </summary>
-        private bool shouldPaint;
-        /// <summary>
-        /// this is the last point the mouse was recorded as being. (updated everytime a mouse move event is raised)
-        /// </summary>
-        private Point lastLocation;
-        /// <summary>
-        /// the path that is being constructed (mousebutton is down and a user is drawing right now)
+        /// The current path that is being constructed by the user (mousebutton is down and a user is currently drawing)
         /// </summary>
         private PathData currentPath;
+        
         /// <summary>
-        /// the color that is currently selected
+        /// All lines are treated as vectors for easy scaling
+        /// </summary>
+        private List<PathData> myPaths;
+        
+        /// <summary>
+        /// Helps dictate to the client when it is allowed to draw
+        /// </summary>
+        private bool shouldPaint;
+        
+        /// <summary>
+        /// The last point the mouse was recorded as being at (updated everytime a mouse move event is raised)
+        /// </summary>
+        private Point lastLocation;
+
+        /// <summary>
+        /// The currently selected color
         /// </summary>
         private Color myColor;
+        
         /// <summary>
-        /// the width that is currently selected
+        /// The currently selected width
         /// </summary>
         private int myWidth;
+        
         /// <summary>
-        /// the mode we are in, either erasing or not (erasing or drawing)
+        /// The currently selected drawing mode, which is either erasing or not (erasing or drawing)
         /// </summary>
         private bool eraseMode;
+
+        #endregion
+
+        #region ClientDrawingBox constructors
+
+        /// <summary>
+        /// boilerplate code constructor
+        /// </summary>
+        public ClientDrawingBox()
+        {
+            InitializeComponent();
+        }
+
+        #endregion
+
+        #region ClientDrawingBox "get" and "set" overridden methods
 
         /// <summary>
         /// the color that is currently selected
@@ -69,6 +95,7 @@ namespace DrawingBox
             get { return myColor; }
             set { myColor = value; }
         }
+      
         /// <summary>
         /// the line width that is currently selected
         /// </summary>
@@ -77,6 +104,7 @@ namespace DrawingBox
             get { return myWidth; }
             set { myWidth = value; }
         }
+        
         /// <summary>
         /// the list of all lines in the drawing box
         /// </summary>
@@ -86,19 +114,12 @@ namespace DrawingBox
             set { myPaths = value; }
         }
 
+        #endregion
 
+        #region ClientDrawingBox helper methods
 
         /// <summary>
-        /// boilerplate code constructor
-        /// </summary>
-        public DrawingBox3()
-        {
-            InitializeComponent();
-        }
-
-        
-        /// <summary>
-        /// clears the entire drawing surface
+        /// Clears the entire drawing surface
         /// </summary>
         public void Clear()
         {
@@ -106,10 +127,11 @@ namespace DrawingBox
             currentPath = new PathData();
             this.Invalidate();
         }
+
         /// <summary>
-        /// flattens the vectors into a single bitmap
+        /// Flattens the vectors into a single bitmap
         /// </summary>
-        /// <returns>an image</returns>
+        /// <returns>a bitmap image</returns>
         public Bitmap getImage()
         {
             Bitmap temp = new Bitmap(this.Width, this.Height);
@@ -118,21 +140,9 @@ namespace DrawingBox
                 g.DrawPath(new Pen(pd.pathColor, pd.pathWidth), pd.path);
             return temp;
         }
+
         /// <summary>
-        /// Deprecated. this loses all vector-iness
-        /// </summary>
-        /// <returns>a string that represents the image</returns>
-        public string getBase64Hash()
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                this.getImage().Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                byte[] byteImage = ms.ToArray();
-                return Convert.ToBase64String(byteImage);
-            }
-        }
-        /// <summary>
-        /// encodes all information required to recreate the image (at any size) into a string.
+        /// Converts the list of PathData from an image into a string
         /// </summary>
         /// <returns>a string representation of the image</returns>
         public string serialize()
@@ -147,6 +157,52 @@ namespace DrawingBox
             }
         }
 
+        /// <summary>
+        /// Identifies whether the given point is located on the specified PathData object
+        /// </summary>
+        /// <param name="path">the current path</param>
+        /// <param name="p">the point being sought</param>
+        /// <returns>true if the PathData contains the point, otherwise false</returns>
+        public bool isPointOnPath(PathData path, Point p)
+        {
+            PointF a, b;
+            Rectangle c;
+            if (path.path.PointCount == 0) return false;
+            for (int i = 0; i < path.path.PathPoints.Length - 1; i++)
+            {
+                a = path.path.PathPoints[i];
+                b = path.path.PathPoints[i + 1];
+                c = new Rectangle(
+                     (int)Math.Min(a.X, b.X),
+                     (int)Math.Min(a.Y, b.Y),
+                     (int)Math.Abs(a.X - b.X) + path.pathWidth + 1,
+                     (int)Math.Abs(a.Y - b.Y) + path.pathWidth + 1);
+                if (c.Contains(p)) return true;
+            }
+
+            return false;
+        }
+        
+        /// <summary>
+        /// Get the index of the point in the list of PathData objects
+        /// </summary>
+        /// <param name="myPaths">the list of paths</param>
+        /// <param name="p">the point being sought</param>
+        /// <returns>the index of the path containing the point, otherwise -1</returns>
+        public int getPathIndexFromPoint(List<PathData> myPaths, Point p)
+        {
+            foreach (PathData pd in myPaths)
+            {
+                if (isPointOnPath(pd, p)) return myPaths.IndexOf(pd);
+            }
+            return -1;
+        }
+
+
+        #endregion
+
+        #region ClientDrawingBox event actions
+
         private void DrawingBox3_Load(object sender, EventArgs e)
         {
             currentPath = new PathData(new GraphicsPath(), myColor, myWidth);
@@ -160,7 +216,7 @@ namespace DrawingBox
         }
         private void DrawingBox_Resize(object sender, EventArgs e)
         {
-            DrawingBox3 mySender = (DrawingBox3)sender;
+            ClientDrawingBox mySender = (ClientDrawingBox)sender;
             mySender.Invalidate();
         }
 
@@ -282,34 +338,6 @@ namespace DrawingBox
             }
         }
 
-        public bool isPointOnPath(PathData pd,Point p)
-        {
-            PointF a,b;
-            Rectangle c;
-            if (pd.path.PointCount == 0) return false;
-            for (int i = 0; i < pd.path.PathPoints.Length - 1; i++)
-            {
-                a = pd.path.PathPoints[i];
-                b = pd.path.PathPoints[i + 1];
-                c = new Rectangle(
-                     (int)Math.Min(a.X, b.X), 
-                     (int)Math.Min(a.Y, b.Y),
-                     (int)Math.Abs(a.X - b.X)+pd.pathWidth+1,
-                     (int) Math.Abs(a.Y - b.Y)+pd.pathWidth+1);
-                if (c.Contains(p)) return true;
-            }
-      
-            return false;
-        }
-        public int getPathIndexFromPoint(List<PathData> myPaths, Point p)
-        {
-            foreach (PathData pd in myPaths)
-            {
-                if (isPointOnPath(pd, p)) return myPaths.IndexOf(pd);
-            }
-            return -1;
-        }
-
         private void toolStripButton1_Click_1(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();
@@ -318,8 +346,7 @@ namespace DrawingBox
             this.myColor = cd.Color;
         }
 
-        
-        
+        #endregion
     }   
 }
  

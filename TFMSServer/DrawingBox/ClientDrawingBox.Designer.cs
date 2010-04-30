@@ -1,6 +1,6 @@
 namespace DrawingBox
 {
-    partial class DrawingBox3
+    partial class ClientDrawingBox
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@ namespace DrawingBox
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DrawingBox3));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClientDrawingBox));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.cmdDraw = new System.Windows.Forms.ToolStripButton();
             this.cmdErase = new System.Windows.Forms.ToolStripButton();
