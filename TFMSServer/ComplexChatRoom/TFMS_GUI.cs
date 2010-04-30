@@ -57,18 +57,27 @@ namespace ComplexChatRoom
             this.Visible = true;
             this.WindowState = FormWindowState.Maximized;
 
+
             #region THIS IS A HACK SO WE DON'T POST THE IMAGE ONLINE
-            drawingBox31.BackgroundImage = Image.FromFile("tfmsimage.jpg");
-            vectorBox1.BackgroundImage = Image.FromFile("tfmsimage.jpg");
+            try
+            {
+                drawingBox31.BackgroundImage = Image.FromFile("tfmsimage.jpg");
+                vectorBox1.BackgroundImage = Image.FromFile("tfmsimage.jpg");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Image file not found!");
+            }
             #endregion
         }
+
 
         #region message handling routines
         void myClient_disconnectDetected(TFMS_Data dataReceived)
         {
             //this.Close();
             myClient = null;
-            MessageBox.Show("The server has probably blown up. We will now exit", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("The server has been closed or has crashed. Please restart the server.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Application.Exit();
         }
         void handleLogon(TFMS_Data msg)
@@ -85,6 +94,7 @@ namespace ComplexChatRoom
         {
 
             notifyIcon1.Visible = true;
+            notifyIcon1.BalloonTipText = string.Format("You have a TFM");
             notifyIcon1.BalloonTipText = string.Format("You've got a TFM!!!");
             notifyIcon1.ShowBalloonTip(5000);
             // make the call to add an item thread safe because chances are that this will be called from another thread

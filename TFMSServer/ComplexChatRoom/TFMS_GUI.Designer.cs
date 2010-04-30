@@ -183,7 +183,7 @@
             // drawingBox31
             // 
             this.drawingBox31.BackColor = System.Drawing.SystemColors.Control;
-            this.drawingBox31.BackgroundImage = global::ComplexChatRoom.Properties.Resources.heavycruiser_enterprise_up1;
+            this.drawingBox31.BackgroundImage = global::ComplexChatRoom.Properties.Resources.tfmsimage;
             this.drawingBox31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.drawingBox31.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.drawingBox31.Cursor = System.Windows.Forms.Cursors.Cross;
@@ -199,7 +199,7 @@
             // vectorBox1
             // 
             this.vectorBox1.BackColor = System.Drawing.Color.Transparent;
-            this.vectorBox1.BackgroundImage = global::ComplexChatRoom.Properties.Resources.heavycruiser_enterprise_up1;
+            this.vectorBox1.BackgroundImage = global::ComplexChatRoom.Properties.Resources.tfmsimage;
             this.vectorBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.vectorBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.vectorBox1.Dock = System.Windows.Forms.DockStyle.Fill;
