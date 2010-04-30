@@ -24,9 +24,9 @@ namespace Console_Server
                 switch (input)
                 {
                     case "c":
-                        Console.WriteLine("Clients: {0}", myServer.clientList.Count);
+                        Console.WriteLine("Clients: {0}", myServer.getClientList().Count);
                         Console.WriteLine("-------------------");
-                        foreach (TFMS_ClientInfo a in myServer.clientList)
+                        foreach (TFMS_ClientInfo a in myServer.getClientList())
                         {
                             Console.WriteLine("{0}",a.strName);
                         } 
