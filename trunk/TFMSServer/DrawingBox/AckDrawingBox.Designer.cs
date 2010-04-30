@@ -1,6 +1,6 @@
 namespace DrawingBox
 {
-    partial class DrawingBox2
+    partial class AckDrawingBox
     {
         /// <summary> 
         /// Required designer variable.
