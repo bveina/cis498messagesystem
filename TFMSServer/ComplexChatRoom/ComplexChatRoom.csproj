@@ -75,7 +75,7 @@
     <Compile Include="LoginDialog.Designer.cs">
       <DependentUpon>LoginDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="TFMS_Client.cs" />
+    <Compile Include="TFMS_Client_Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="TFMS_GUI.resx">
       <DependentUpon>TFMS_GUI.cs</DependentUpon>

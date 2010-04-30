@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace ComplexChatRoom
 {
-    static class TFMS_Client
+    static class TFMS_Client_Main
     {
         /// <summary>
         /// The main entry point for the application.
