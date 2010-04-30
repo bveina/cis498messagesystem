@@ -1,4 +1,6 @@
-﻿namespace ComplexChatRoom
+﻿using TFMS_Space;
+
+namespace ComplexChatRoom
 {
     partial class LoginDialog
     {
@@ -85,7 +87,7 @@
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(100, 20);
             this.txtPort.TabIndex = 1;
-            this.txtPort.Text = "1000";
+            this.txtPort.Text = TFMS_Constants.PORT_NUM.ToString();
             // 
             // txtServer
             // 
