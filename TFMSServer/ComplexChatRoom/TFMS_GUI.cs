@@ -58,8 +58,8 @@ namespace ComplexChatRoom
             this.WindowState = FormWindowState.Maximized;
 
             #region THIS IS A HACK SO WE DON'T POST THE IMAGE ONLINE
-            drawingBox31.BackgroundImage = Image.FromFile("c:\\tfmsimage.jpg");
-            vectorBox1.BackgroundImage = Image.FromFile("c:\\tfmsimage.jpg");
+            drawingBox31.BackgroundImage = Image.FromFile("tfmsimage.jpg");
+            vectorBox1.BackgroundImage = Image.FromFile("tfmsimage.jpg");
             #endregion
         }
 

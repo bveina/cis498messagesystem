@@ -4,7 +4,6 @@ C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServ
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\DrawingBox\obj\Debug\DrawingBox.DrawingBox2.resources
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\DrawingBox\obj\Debug\DrawingBox.DrawingBox3.resources
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\DrawingBox\obj\Debug\DrawingBox.Properties.Resources.resources
-C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\DrawingBox\obj\Debug\DrawingBox.DrawingBox.resources
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\DrawingBox\obj\Debug\DrawingBox.vectorBox.resources
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\DrawingBox\obj\Debug\DrawingBox.csproj.GenerateResource.Cache
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\DrawingBox\obj\Debug\DrawingBox.dll
