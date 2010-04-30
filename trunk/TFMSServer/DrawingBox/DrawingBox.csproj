@@ -54,11 +54,11 @@
     <Compile Include="Drawingbox2.Designer.cs">
       <DependentUpon>Drawingbox2.cs</DependentUpon>
     </Compile>
-    <Compile Include="DrawingBox3.cs">
+    <Compile Include="ClientDrawingBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DrawingBox3.Designer.cs">
-      <DependentUpon>DrawingBox3.cs</DependentUpon>
+    <Compile Include="ClientDrawingBox.Designer.cs">
+      <DependentUpon>ClientDrawingBox.cs</DependentUpon>
     </Compile>
     <Compile Include="PathData.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -67,11 +67,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="vectorBox.cs">
+    <Compile Include="VectorBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="vectorBox.Designer.cs">
-      <DependentUpon>vectorBox.cs</DependentUpon>
+    <Compile Include="VectorBox.Designer.cs">
+      <DependentUpon>VectorBox.cs</DependentUpon>
     </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
@@ -80,17 +80,17 @@
       <SubType>Designer</SubType>
       <DependentUpon>Drawingbox2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DrawingBox3.resx">
+    <EmbeddedResource Include="ClientDrawingBox.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>DrawingBox3.cs</DependentUpon>
+      <DependentUpon>ClientDrawingBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="vectorBox.resx">
-      <DependentUpon>vectorBox.cs</DependentUpon>
+    <EmbeddedResource Include="VectorBox.resx">
+      <DependentUpon>VectorBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
