@@ -102,8 +102,14 @@ namespace ComplexChatRoom
         /// <summary>this sends the current image to the server.</summary>
         private void cmdSend_Click(object sender, EventArgs e)
         {
-            myClient.sendMessage(drawingBox31.serialize());
-            drawingBox31.Clear();
+            String message = drawingBox31.serialize();
+            if (drawingBox31.lines.Count == 0)
+                MessageBox.Show("You haven't written anything!!!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                myClient.sendMessage(message);
+                drawingBox31.Clear();
+            }
         }
         
         /// <summary>if we are exiting we should disconnect from the server.</summary>
