@@ -91,7 +91,7 @@ namespace TFMS_Space
         {
             socket = inSocket;
             strName = inName;
-            buffer = null;
+            buffer = new byte[TFMS_Constants.BUFFER_SIZE];
         }
     }
 
@@ -251,25 +251,28 @@ namespace TFMS_Space
             msgToSend.strName = msgReceived.strName;
 
 
-            //TODO: call the new all encompasing Message handler here (not in each case block)
-            //messageReceived(Data);
+            // set the message to send, client info buffer size, and client info based on the incoming command
             switch (msgReceived.cmdCommand)
             {
                 case TFMS_Command.Login:
-                    #region handle Login
-                    logonRequested(msgReceived); // tell the user of the class we have received a logon
+                    #region Login command
+
+                    // tell the user of the class we have received a logon
+                    logonRequested(msgReceived);
                     
-                    //When a user logs in to the server then we add her to our list of clients                    
+                    // add the new client to the current list of clients
                     TFMS_ClientInfo clientInfo = new TFMS_ClientInfo(clientSocket, msgReceived.strName);
                     clientList.Add(clientInfo);
 
                     Console.WriteLine("received login from:{0}", getNamefromSocket(clientSocket));
+                    
                     //just pass the name to other clients for now
                     // let the client program handle how to deal with it.
                     // the command and strName have been filled above.
                     msgToSend.strMessage = msgReceived.strName;
                     clientInfo.buffer = new byte[TFMS_Constants.BUFFER_SIZE]; // dimension the clients buffer.
                     CI = clientInfo; // CI would not have been found before since its not in the clientList so just add it now
+
                     #endregion
                     break;
                 case TFMS_Command.Logout:
