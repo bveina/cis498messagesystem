@@ -1,5 +1,4 @@
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\ComplexChatRoom\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\ComplexChatRoom\obj\Debug\ComplexChatRoom.Form1.resources
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\ComplexChatRoom\obj\Debug\ComplexChatRoom.LoginDialog.resources
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\ComplexChatRoom\obj\Debug\ComplexChatRoom.Properties.Resources.resources
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\ComplexChatRoom\obj\Debug\ComplexChatRoom.csproj.GenerateResource.Cache
@@ -11,3 +10,4 @@ C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServ
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\ComplexChatRoom\bin\Debug\DrawingBox.pdb
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\ComplexChatRoom\obj\Debug\ComplexChatRoom.exe
 C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\ComplexChatRoom\obj\Debug\ComplexChatRoom.pdb
+C:\Users\Kyle\Documents\Visual Studio 2008\Projects\cis498messagesystem\TFMSServer\ComplexChatRoom\obj\Debug\ComplexChatRoom.TFMS_GUI.resources
