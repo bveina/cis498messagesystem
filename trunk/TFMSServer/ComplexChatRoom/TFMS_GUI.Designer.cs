@@ -40,8 +40,8 @@
             this.cmdCopy = new System.Windows.Forms.Button();
             this.lstMessages = new System.Windows.Forms.ListBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.drawingBox31 = new DrawingBox.DrawingBox3();
-            this.vectorBox1 = new DrawingBox.vectorBox();
+            this.drawingBox31 = new DrawingBox.ClientDrawingBox();
+            this.vectorBox1 = new DrawingBox.VectorBox();
             this.tabPages.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -245,8 +245,8 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox lstMessages;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
-        private DrawingBox.DrawingBox3 drawingBox31;
-        private DrawingBox.vectorBox vectorBox1;
+        private DrawingBox.ClientDrawingBox drawingBox31;
+        private DrawingBox.VectorBox vectorBox1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button cmdCopy;
     }
