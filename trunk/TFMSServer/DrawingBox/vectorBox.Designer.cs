@@ -1,6 +1,6 @@
 ﻿namespace DrawingBox
 {
-    partial class vectorBox
+    partial class VectorBox
     {
         /// <summary> 
         /// Required designer variable.
