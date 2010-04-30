@@ -12,13 +12,16 @@ namespace Console_Server
     {
         static void Main(string[] args)
         {
-            TFMS_Server myServer = new TFMS_Server(1000);
+            TFMS_Server myServer = new TFMS_Server();
+
             myServer.listRequested += new TFMS_MessageRecieved(handleListRequest);
             myServer.logonRequested += new TFMS_MessageRecieved(handleLoginRequest);
             myServer.logoffRequested += new TFMS_MessageRecieved(handleLogoffRequest);
             myServer.relayRequested += new TFMS_MessageRecieved(handleRelayRequest);
             myServer.startServer();
+            
             string input = Console.ReadLine();
+            
             while (input != "x")
             {
                 switch (input)
@@ -53,12 +56,8 @@ namespace Console_Server
         static void handleRelayRequest(TFMS_Data d)
         {
             Console.WriteLine("{0} has sent a message", d.strName);
-
-//            if (d.strMessage.Length>255)
-//                Console.WriteLine("{0} has sent a long message", d.strName );
-//            else
-//                Console.WriteLine("{0} has sent \"{1}\"", d.strName, d.strMessage);
             
+            // log the message in the SQL database
             //logMessage(d);
         }
 
