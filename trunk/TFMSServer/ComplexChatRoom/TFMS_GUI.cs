@@ -13,20 +13,51 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ComplexChatRoom
 {
+    /// <summary>
+    /// The TFMS_GUI class provides a simple way for the user to log on in to the Tactical Field Message System
+    /// TFMS_GUI starts by prompting the user for a user name, IP address, and destination port number
+    /// If the credentials check out, the user is provided an interface with sending and receiving capabilities
+    /// In the "Compose" tab the user can create and send messages, while in the "Acknowledge" tab the user can view messages
+    /// </summary>
     public partial class TFMS_GUI : Form
     {
+        #region TFMS_GUI class variables
+
+        /// <summary>
+        /// The user's login name
+        /// </summary>
         string name;
+
+        /// <summary>
+        /// The IP address of the dedicated TFMS server
+        /// </summary>
         string serverAddress;
+
+        /// <summary>
+        /// The port number of the TFMS server at the IP address
+        /// </summary>
         int serverPort;
+
+        /// <summary>
+        /// The TFMS_Client object, which represents the user's session in the system
+        /// </summary>
         TFMS_Client myClient;
+
+        #endregion
+
+        #region TFMS_GUI constructors
+
         public TFMS_GUI()
         {
             InitializeComponent();
         }
 
+        #endregion
+
+        #region TFMS_GUI event actions
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            #region get server and client info and try to login to the server
             LoginDialog login = new LoginDialog();
             DialogResult r;
             do
@@ -34,10 +65,15 @@ namespace ComplexChatRoom
                 r = login.ShowDialog();
                 if (r == DialogResult.OK)
                 {
+                    // get the user's name, IP address, and port number from the LoginDialog
                     name = login.name;
                     serverAddress = login.serverAddr;
                     serverPort = int.Parse(login.serverPort);
+
+                    // create a new TFMS_Client object 
                     myClient = new TFMS_Client(serverPort, name);
+
+                    // create the TFMS_Client delegates
                     myClient.loginReceived += new TFMS_MessageRecieved(handleLogon);
                     myClient.logoffReceived += new TFMS_MessageRecieved(handleLogoff);
                     myClient.listReceived += new TFMS_MessageRecieved(handleList);
@@ -51,8 +87,9 @@ namespace ComplexChatRoom
                 }
 
             } while (myClient == null || !myClient.connect(serverAddress));
-            #endregion
-            this.Text = name; // set the form title to show your name
+
+            // set the form title to show the user's login name
+            this.Text = name; 
 
             this.Visible = true;
             this.WindowState = FormWindowState.Maximized;
@@ -71,26 +108,32 @@ namespace ComplexChatRoom
             #endregion
         }
 
+        #endregion
 
-        #region message handling routines
-        void myClient_disconnectDetected(TFMS_Data dataReceived)
+        #region TFMS_GUI helper methods
+
+        private void myClient_disconnectDetected(TFMS_Data dataReceived)
         {
             //this.Close();
             myClient = null;
             MessageBox.Show("The server has been closed or has crashed. Please restart the server.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Application.Exit();
         }
-        void handleLogon(TFMS_Data msg)
+
+
+        private void handleLogon(TFMS_Data msg)
         {
             notifyIcon1.BalloonTipText = string.Format("{0} has joined", msg.strName);
             notifyIcon1.ShowBalloonTip(500);
         }
-        void handleLogoff(TFMS_Data msg)
+        
+        private void handleLogoff(TFMS_Data msg)
         {
             notifyIcon1.BalloonTipText = string.Format("{0} has left", msg.strName);
             notifyIcon1.ShowBalloonTip(500);
         }
-        void handleMessage(TFMS_Data msg)
+        
+        private void handleMessage(TFMS_Data msg)
         {
 
             notifyIcon1.Visible = true;
@@ -102,18 +145,22 @@ namespace ComplexChatRoom
             else
                 lstMessages.Items.Add(msg);
         }
-        void handleList(TFMS_Data msg)
+        
+        private void handleList(TFMS_Data msg)
         {
             notifyIcon1.ShowBalloonTip(500, "List", "you got the list of peers", ToolTipIcon.Info);
         }
+
         #endregion
 
+        #region TFMS_GUI event actions
+        
         /// <summary>this sends the current image to the server.</summary>
         private void cmdSend_Click(object sender, EventArgs e)
         {
             String message = drawingBox31.serialize();
             if (drawingBox31.lines.Count == 0)
-                MessageBox.Show("You haven't written anything!!!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("You haven't written anything!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 myClient.sendMessage(message);
@@ -130,22 +177,29 @@ namespace ComplexChatRoom
                 myClient.disconnect();
         }
 
-        /// <summary> when the user clicks on a message it should be displayed in the vector box. </summary>
+        /// <summary>
+        /// When a user clicks on a message in the "Acknowledged" tab, it should be displayed, flagged as "read", and change colors
+        /// </summary>
+        /// <param name="sender">mandatory parameter</param>
+        /// <param name="e">current event action</param>
         private void lstMessages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            #region use the path data to recreate the image on the vectorbox
-
             if (lstMessages.SelectedItem == null) return;
+
             try
             {
+                // retrieve the TFMS_Data for the currently selected message
                 List<DrawingBox.PathData> myPaths;
                 TFMS_Data myData = (TFMS_Data)lstMessages.SelectedItem;
+
+                // set the acknowledged flag
                 myData.acknowledged = true;
+
                 string mystr = myData.strMessage;
                 string[] items = mystr.Split(',');
                 string hash = items[2];
 
-
+                // convert the message from a string to a displayable image
                 using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(hash)))
                 {
                     BinaryFormatter xs = new BinaryFormatter();
@@ -161,26 +215,28 @@ namespace ComplexChatRoom
                 vectorBox1.ResumeLayout();
                 vectorBox1.Invalidate();
                 lstMessages.Invalidate();
-
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "there was an error displaying the image");
+                MessageBox.Show(ex.Message, "There was an error displaying the image!");
             }
-            #endregion
         }
 
-        private void drawingBox31_Load(object sender, EventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// Necessary method that is being overwritten
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void vectorBox1_Load(object sender, EventArgs e)
         {
 
         }
 
-        /// <summary>this handles the custom drawing of the individual items on the list box of messages</summary>
+        /// <summary>
+        /// Handles the custom drawing of the individual items on the list box of messages
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstMessages_DrawItem(object sender, DrawItemEventArgs e)
         {
             TFMS_Data tmp = (TFMS_Data)lstMessages.Items[e.Index];
@@ -212,8 +268,6 @@ namespace ComplexChatRoom
             }
             // If the ListBox has focus, draw a focus rectangle around the selected item.
             e.DrawFocusRectangle();
-            
-
         }
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
@@ -226,5 +280,7 @@ namespace ComplexChatRoom
         {
             drawingBox31.lines = vectorBox1.Paths;
         }
+
+        #endregion
     }
 }
