@@ -85,7 +85,7 @@ namespace ComplexChatRoom
         {
 
             notifyIcon1.Visible = true;
-            notifyIcon1.BalloonTipText = string.Format("you've got TFMS");
+            notifyIcon1.BalloonTipText = string.Format("You've got a TFM!!!");
             notifyIcon1.ShowBalloonTip(5000);
             // make the call to add an item thread safe because chances are that this will be called from another thread
             if (lstMessages.InvokeRequired) 
