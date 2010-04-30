@@ -9,10 +9,41 @@ using System.Drawing.Drawing2D;
 
 namespace DrawingBox
 {
-    public partial class vectorBox : UserControl
+    /// <summary>
+    /// The VectorBox class is a control that allows the user to create a set of paths within a path bounds region
+    /// The set of path represents the message that the user wants to send, and the path bounds represents the area in which the message is drawn
+    /// </summary>
+    public partial class VectorBox : UserControl
     {
-        List<PathData> myPaths;
-        Rectangle myPathBounds;
+        #region VectorBox class variables
+
+        /// <summary>
+        /// The set of paths that the user draws to represent the user's message
+        /// </summary>
+        private List<PathData> myPaths;
+
+        /// <summary>
+        /// The messages bounds are contained within a rectangular region
+        /// </summary>
+        private Rectangle myPathBounds;
+
+        #endregion
+
+        #region VectorBox constructors
+
+        /// <summary>
+        /// Default constructor: creates a new VectorBox component, sets the initial path set to null and creates a new path bounds region
+        /// </summary>
+        public VectorBox()
+        {
+            InitializeComponent();
+            myPaths = null;
+            pathBounds = new Rectangle();
+        }
+
+        #endregion
+
+        #region VectorBox "get" and "set" overridden methods
 
         public Rectangle pathBounds
         {
@@ -58,12 +89,9 @@ namespace DrawingBox
             }
         }
 
-        public vectorBox()
-        {
-            InitializeComponent();
-            Paths = null;
-            pathBounds = new Rectangle();
-        }
+        #endregion
+
+        #region VectorBox event actions
 
         private void vectorBox_Paint(object sender, PaintEventArgs e)
         {
@@ -91,9 +119,6 @@ namespace DrawingBox
             }
         }
 
-        private void vectorBox_Load(object sender, EventArgs e)
-        {
-
-        }
+        #endregion
     }
 }
