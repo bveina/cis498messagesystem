@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="DrawingBox.AckDrawingBox">
-    <Position X="2.25" Y="0.5" Width="1.5" />
+    <Position X="3.25" Y="0.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAgAAANAICAAACCAABCAAAQCAAAAIAAAAgAAACFAAQA=</HashCode>
       <FileName>AckDrawingBox.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DrawingBox.ClientDrawingBox">
-    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Position X="0.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AgSAAA8AICABQCCAoFeAJEQCAAIAIAECAgCgFCFAYEA=</HashCode>
       <FileName>ClientDrawingBox.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DrawingBox.PathData" BaseTypeListCollapsed="true">
-    <Position X="5.75" Y="0.5" Width="1.5" />
+    <Position X="8.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAACAgAgABIAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>PathData.cs</FileName>
@@ -23,14 +23,14 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="DrawingBox.VectorBox">
-    <Position X="4" Y="0.5" Width="1.5" />
+    <Position X="6.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAIAACAAAAFAAACAAAQCABAAAAAAAACAAAAAECA=</HashCode>
       <FileName>VectorBox.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DrawingBox.Properties.Resources" Collapsed="true">
-    <Position X="7.5" Y="0.5" Width="1.5" />
+    <Position X="10.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BAAAgAAAAAAgAAQEAAABEAAAAQAAECQAAAAAgABIAIA=</HashCode>
     </TypeIdentifier>
