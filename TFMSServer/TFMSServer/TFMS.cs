@@ -351,6 +351,16 @@ namespace TFMS_Space
             }
         }
 
+        /// <summary>
+        /// When a message is sent, set the client's state to sent, and end the current send
+        /// </summary>
+        /// <param name="result">the current socket with updated information</param>
+        public void OnSend(IAsyncResult result)
+        {
+            Socket client = (Socket)result.AsyncState;
+            client.EndSend(result);
+        }
+
         #endregion
 
         #region TFMS_Server private methods
@@ -375,16 +385,6 @@ namespace TFMS_Space
                     sendTFMSmsg(data, c.socket, new AsyncCallback(OnSend));
                 }
             }
-        }
-
-        /// <summary>
-        /// When a message is sent, set the client's state to sent, and end the current send
-        /// </summary>
-        /// <param name="result">the current socket with updated information</param>
-        public void OnSend(IAsyncResult result)
-        {
-            Socket client = (Socket)result.AsyncState;
-            client.EndSend(result);
         }
 
         /// <summary>
