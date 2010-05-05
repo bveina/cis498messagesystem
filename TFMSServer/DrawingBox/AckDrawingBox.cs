@@ -46,6 +46,24 @@ namespace DrawingBox
         /// </summary>
         private int myWidth;
 
+        /// <summary>
+        /// The public accessor for the color of the current path
+        /// </summary>
+        public Color lineColor
+        {
+            get { return myColor; }
+            set { myColor = value; }
+        }
+
+        /// <summary>
+        /// The public accessor for the width of the current path
+        /// </summary>
+        public int lineWidth
+        {
+            get { return myWidth; }
+            set { myWidth = value; }
+        }
+
         #endregion
 
         #region AckDrawingBox constructors
@@ -53,21 +71,6 @@ namespace DrawingBox
         public AckDrawingBox()
         {
             InitializeComponent();
-        }
-
-        #endregion
-
-        #region AckDrawingBox "get" and "set" overridden methods
-
-        public Color lineColor
-        {
-            get { return myColor; }
-            set { myColor = value; }
-        }
-        public int lineWidth
-        {
-            get { return myWidth; }
-            set { myWidth = value; }
         }
 
         #endregion
@@ -94,10 +97,15 @@ namespace DrawingBox
 
         #region AckDrawingBox event actions
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             shouldPaint = true;
-            currentPath=new PathData(new GraphicsPath(),myColor,myWidth);
+            currentPath = new PathData(new GraphicsPath(), myColor, myWidth);
             lastLocation = e.Location;
             Cursor.Clip = this.RectangleToScreen(this.ClientRectangle);
         }
@@ -106,20 +114,17 @@ namespace DrawingBox
         {
             if (!shouldPaint) return;
             if (lastLocation == e.Location) return;
+
             currentPath.path.AddLine(lastLocation, e.Location);
-            //Todo: invalidate less...
-            this.Invalidate(new Rectangle(Math.Min(lastLocation.X, e.X) - myWidth / 2,
-                                          Math.Min(lastLocation.Y, e.Y) - myWidth / 2,
-                                          Math.Abs(lastLocation.X - e.X) + myWidth,
-                                          Math.Abs(lastLocation.Y - e.Y) + myWidth));
+            this.Invalidate(new Rectangle(Math.Min(lastLocation.X, e.X) - myWidth / 2, Math.Min(lastLocation.Y, e.Y) - myWidth / 2, Math.Abs(lastLocation.X - e.X) + myWidth, Math.Abs(lastLocation.Y - e.Y) + myWidth));
             lastLocation = e.Location;
         }
 
-        
         private void DrawingBox_MouseUp(object sender, MouseEventArgs e)
         {
             Cursor.Clip = Screen.PrimaryScreen.Bounds;
             shouldPaint = false;
+
             if (currentPath != null)
             {
                 myPaths.Add(currentPath);
@@ -130,6 +135,7 @@ namespace DrawingBox
         private void DrawingBox_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(this.BackColor);
+
             if (this.BackgroundImageLayout == ImageLayout.None)
                 e.Graphics.DrawImage(this.BackgroundImage, 0, 0);
             else if (this.BackgroundImageLayout == ImageLayout.Stretch)
@@ -137,18 +143,17 @@ namespace DrawingBox
 
             foreach (PathData pd in myPaths)
             {
-                //if (pd.path == null) continue;
                 Pen p = new Pen(pd.pathColor, pd.pathWidth);
                 e.Graphics.DrawPath(p, pd.path);
                 p.Dispose();
             }
+
             if (currentPath.path != null)
             {
                 Pen t = new Pen(currentPath.pathColor, currentPath.pathWidth);
                 e.Graphics.DrawPath(t, currentPath.path);
             }
         }
-
 
         private void DrawingBox_Load(object sender, EventArgs e)
         {
@@ -163,6 +168,5 @@ namespace DrawingBox
         }
 
         #endregion
-    }
-    
+    }   
 }
