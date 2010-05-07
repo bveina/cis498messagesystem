@@ -26,7 +26,7 @@ namespace ComplexChatRoom
         /// <summary>
         /// Defines the amount of time the balloon tips remain visible
         /// </summary>
-        public const int POPUP_TIME = 500;
+        private const int POPUP_TIME = 500;
 
         /// <summary>
         /// The user's login name
