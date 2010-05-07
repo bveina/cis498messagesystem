@@ -249,7 +249,7 @@ namespace ComplexChatRoom
                     // Draw the background of the ListBox control for each item.
                     e.DrawBackground();
                     e.Graphics.DrawString(dispString,
-                        e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
                 }
                 else
                 {
