@@ -59,63 +59,6 @@ namespace ComplexChatRoom
 
         #endregion
 
-        #region TFMS_GUI event actions
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            LoginDialog login = new LoginDialog();
-            DialogResult result;
-
-            do
-            {
-                result = login.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    // get the user's name, IP address, and port number from the LoginDialog
-                    name = login.name;
-                    serverAddress = login.serverAddr;
-                    serverPort = int.Parse(login.serverPort);
-
-                    // create a new TFMS_Client object 
-                    myClient = new TFMS_Client(serverPort, name);
-
-                    // create the TFMS_Client delegates
-                    myClient.loginReceived += new TFMS_MessageRecieved(handleLogon);
-                    myClient.logoffReceived += new TFMS_MessageRecieved(handleLogoff);
-                    myClient.listReceived += new TFMS_MessageRecieved(handleList);
-                    myClient.dataReceived += new TFMS_MessageRecieved(handleMessage);
-                    myClient.disconnectDetected += new TFMS_MessageRecieved(myClient_disconnectDetected);
-                }
-                else if (result == DialogResult.Cancel)
-                {
-                    this.Close();
-                    return;
-                }
-
-            } while (myClient == null || !myClient.connect(serverAddress));
-
-            // set the form title to show the user's login name
-            this.Text = name; 
-
-            this.Visible = true;
-            this.WindowState = FormWindowState.Maximized;
-
-
-            #region THIS IS A HACK SO WE DON'T POST THE IMAGE ONLINE
-            try
-            {
-                drawingBox31.BackgroundImage = Image.FromFile("tfmsimage.jpg");
-                vectorBox1.BackgroundImage = Image.FromFile("tfmsimage.jpg");
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Image file not found!");
-            }
-            #endregion
-        }
-
-        #endregion
-
         #region TFMS_GUI helper methods
 
         /// <summary>
@@ -178,7 +121,65 @@ namespace ComplexChatRoom
         #endregion
 
         #region TFMS_GUI event actions
-        
+
+        /// <summary>
+        /// Run the login dialog to initiate the TFMS Client GUI
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            LoginDialog login = new LoginDialog();
+            DialogResult result;
+
+            do
+            {
+                result = login.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    // get the user's name, IP address, and port number from the LoginDialog
+                    name = login.name;
+                    serverAddress = login.serverAddr;
+                    serverPort = int.Parse(login.serverPort);
+
+                    // create a new TFMS_Client object 
+                    myClient = new TFMS_Client(serverPort, name);
+
+                    // create the TFMS_Client delegates
+                    myClient.loginReceived += new TFMS_MessageRecieved(handleLogon);
+                    myClient.logoffReceived += new TFMS_MessageRecieved(handleLogoff);
+                    myClient.listReceived += new TFMS_MessageRecieved(handleList);
+                    myClient.dataReceived += new TFMS_MessageRecieved(handleMessage);
+                    myClient.disconnectDetected += new TFMS_MessageRecieved(myClient_disconnectDetected);
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    this.Close();
+                    return;
+                }
+
+            } while (myClient == null || !myClient.connect(serverAddress));
+
+            // set the form title to show the user's login name
+            this.Text = name;
+
+            this.Visible = true;
+            this.WindowState = FormWindowState.Maximized;
+
+
+            #region THIS IS A HACK SO WE DON'T POST THE IMAGE ONLINE
+            try
+            {
+                drawingBox31.BackgroundImage = Image.FromFile("tfmsimage.jpg");
+                vectorBox1.BackgroundImage = Image.FromFile("tfmsimage.jpg");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Image file not found!");
+            }
+            #endregion
+        }
+
         /// <summary>this sends the current image to the server.</summary>
         private void cmdSend_Click(object sender, EventArgs e)
         {
