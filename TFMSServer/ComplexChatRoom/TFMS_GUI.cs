@@ -239,35 +239,42 @@ namespace ComplexChatRoom
         /// <param name="e"></param>
         private void lstMessages_DrawItem(object sender, DrawItemEventArgs e)
         {
-            TFMS_Data tmp = (TFMS_Data)lstMessages.Items[e.Index];
-            string dispString = string.Format("{0} - {1}", tmp.strName, tmp.timeStamp);
-
-            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            try
             {
-                // Draw the background of the ListBox control for each item.
-                e.DrawBackground();
-                e.Graphics.DrawString(dispString,
-                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                TFMS_Data tmp = (TFMS_Data)lstMessages.Items[e.Index];
+                string dispString = string.Format("{0} - {1}", tmp.strName, tmp.timeStamp);
+
+                if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                {
+                    // Draw the background of the ListBox control for each item.
+                    e.DrawBackground();
+                    e.Graphics.DrawString(dispString,
+                        e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                }
+                else
+                {
+                    // Define the default color of the brush as black.
+                    Brush myBrush = Brushes.Black;
+
+                    // Determine the color of the brush to draw each item based 
+                    // on the index of the item to draw.
+                    myBrush = ((TFMS_Data)lstMessages.Items[e.Index]).dispColor;
+
+                    e.Graphics.FillRectangle(myBrush, e.Bounds);
+                    // Draw the current item text based on the current Font 
+                    // and the custom brush settings.
+
+                    e.Graphics.DrawString(dispString,
+                        e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+
+                }
+                // If the ListBox has focus, draw a focus rectangle around the selected item.
+                e.DrawFocusRectangle();
             }
-            else
+            catch (Exception)
             {
-                // Define the default color of the brush as black.
-                Brush myBrush = Brushes.Black;
-
-                // Determine the color of the brush to draw each item based 
-                // on the index of the item to draw.
-                myBrush = ((TFMS_Data)lstMessages.Items[e.Index]).dispColor;
-
-                e.Graphics.FillRectangle(myBrush, e.Bounds);
-                // Draw the current item text based on the current Font 
-                // and the custom brush settings.
-                
-                e.Graphics.DrawString(dispString,
-                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
-
+                return;
             }
-            // If the ListBox has focus, draw a focus rectangle around the selected item.
-            e.DrawFocusRectangle();
         }
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
