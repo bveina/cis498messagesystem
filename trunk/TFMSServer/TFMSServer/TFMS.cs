@@ -24,8 +24,8 @@ namespace TFMS_Space
     /// <summary>
     /// Defines the delegate that handles different types of messages
     /// </summary>
-    /// <param name="dataReceived">data from the received message</param>
-    public delegate void TFMS_MessageRecieved(TFMS_Data dataReceived);
+    /// <param name="data">data from the received message</param>
+    public delegate void TFMS_MessageRecieved(TFMS_Data data);
 
     /// <summary>
     /// The commands for interaction between the server and the client
