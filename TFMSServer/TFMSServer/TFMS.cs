@@ -725,14 +725,16 @@ namespace TFMS_Space
                         dataReceived(msgReceived);
                         break;
 
-                    case TFMS_Command.List:
-                        listReceived(msgReceived);
-                        break;
                     case TFMS_Command.MsgLen:
                         // this is the only place that a long message has to do work in the client class
                         // everything else is passed on to the client
                         buffSize = int.Parse(msgReceived.strMessage);
                         break;
+
+                    case TFMS_Command.List:
+                        listReceived(msgReceived);
+                        break;
+
                     case TFMS_Command.Null:
                         break;
                 }
@@ -902,7 +904,6 @@ namespace TFMS_Space
         }
 
         #endregion
-
     }
 
     /// <summary>
