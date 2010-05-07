@@ -18,6 +18,8 @@ namespace TFMS_Space
     /// </summary>
     public class TFMS_ClientInfo
     {
+        #region TFMS_ClientInfo class varaibles
+
         /// <summary>
         /// Socket used to comunicate between this client and the server
         /// </summary>
@@ -33,6 +35,10 @@ namespace TFMS_Space
         /// </summary>
         public byte[] buffer;
 
+        #endregion
+
+        #region TFMS_ClientInfo
+
         /// <summary>
         /// TFMS_ClientInfo constructor:
         /// - associates a client with a Socket and a name
@@ -45,5 +51,7 @@ namespace TFMS_Space
             strName = inName;
             buffer = new byte[TFMS_Constants.BUFFER_SIZE];
         }
+
+        #endregion
     }
 }
