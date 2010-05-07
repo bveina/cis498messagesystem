@@ -24,6 +24,11 @@ namespace ComplexChatRoom
         #region TFMS_GUI class variables
 
         /// <summary>
+        /// Defines the amount of time the balloon tips remain visible
+        /// </summary>
+        public const int POPUP_TIME = 500;
+
+        /// <summary>
         /// The user's login name
         /// </summary>
         string name;
@@ -59,11 +64,12 @@ namespace ComplexChatRoom
         private void Form1_Load(object sender, EventArgs e)
         {
             LoginDialog login = new LoginDialog();
-            DialogResult r;
+            DialogResult result;
+
             do
             {
-                r = login.ShowDialog();
-                if (r == DialogResult.OK)
+                result = login.ShowDialog();
+                if (result == DialogResult.OK)
                 {
                     // get the user's name, IP address, and port number from the LoginDialog
                     name = login.name;
@@ -80,7 +86,7 @@ namespace ComplexChatRoom
                     myClient.dataReceived += new TFMS_MessageRecieved(handleMessage);
                     myClient.disconnectDetected += new TFMS_MessageRecieved(myClient_disconnectDetected);
                 }
-                else if (r == DialogResult.Cancel)
+                else if (result == DialogResult.Cancel)
                 {
                     this.Close();
                     return;
@@ -112,33 +118,47 @@ namespace ComplexChatRoom
 
         #region TFMS_GUI helper methods
 
-        private void myClient_disconnectDetected(TFMS_Data dataReceived)
+        /// <summary>
+        /// If a client is running and the server has disappeared, alert the user
+        /// </summary>
+        /// <param name="dataReceived">the TFMS_Data object indicating the server was lost</param>
+        private void myClient_disconnectDetected(TFMS_Data msg)
         {
-            //this.Close();
             myClient = null;
             MessageBox.Show("The server has been closed or has crashed. Please restart the server.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Application.Exit();
         }
 
-
+        /// <summary>
+        /// If the server indicates that another client has logged in, alert the current user
+        /// </summary>
+        /// <param name="msg">the TFMS_Data object indicating another user logged in</param>
         private void handleLogon(TFMS_Data msg)
         {
             notifyIcon1.BalloonTipText = string.Format("{0} has joined", msg.strName);
-            notifyIcon1.ShowBalloonTip(500);
+            notifyIcon1.ShowBalloonTip(POPUP_TIME);
         }
         
+        /// <summary>
+        /// If the server indicates that another client has logged off, alert the current user
+        /// </summary>
+        /// <param name="msg">the TFMS_Data object indicating another user logged out</param>
         private void handleLogoff(TFMS_Data msg)
         {
             notifyIcon1.BalloonTipText = string.Format("{0} has left", msg.strName);
-            notifyIcon1.ShowBalloonTip(500);
+            notifyIcon1.ShowBalloonTip(POPUP_TIME);
         }
         
+        /// <summary>
+        /// If the server indicates that a message was received, alert the current user
+        /// </summary>
+        /// <param name="msg">the TFMS_Data object indicating a message was received</param>
         private void handleMessage(TFMS_Data msg)
         {
-
             notifyIcon1.Visible = true;
             notifyIcon1.BalloonTipText = string.Format("You have a TFM");
-            notifyIcon1.ShowBalloonTip(5000);
+            notifyIcon1.ShowBalloonTip(10 * POPUP_TIME);
+
             // make the call to add an item thread safe because chances are that this will be called from another thread
             if (lstMessages.InvokeRequired) 
                 lstMessages.Invoke(new Action<TFMS_Data>(delegate(TFMS_Data a) { lstMessages.Items.Add(a); }), msg);
@@ -146,9 +166,13 @@ namespace ComplexChatRoom
                 lstMessages.Items.Add(msg);
         }
         
+        /// <summary>
+        /// When the server indicates that a client has logged in, send the updated list to the current user
+        /// </summary>
+        /// <param name="msg">the TFMS_Data object indicating the peer list was updated</param>
         private void handleList(TFMS_Data msg)
         {
-            notifyIcon1.ShowBalloonTip(500, "List", "you got the list of peers", ToolTipIcon.Info);
+            notifyIcon1.ShowBalloonTip(POPUP_TIME, "List", "You got the list of peers", ToolTipIcon.Info);
         }
 
         #endregion
