@@ -12,7 +12,7 @@ namespace ComplexChatRoom
         /// TFMS_Client_Main starts a TFMS_GUI, which allows a user to log in to the system
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
