@@ -140,7 +140,6 @@ namespace ComplexChatRoom
                     // get the user's name, IP address, and port number from the LoginDialog
                     name = login.name;
                     serverAddress = login.serverAddr;
-                    serverPort = int.Parse(login.serverPort);
 
                     // create a new TFMS_Client object 
                     myClient = new TFMS_Client(serverPort, name);

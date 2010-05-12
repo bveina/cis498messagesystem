@@ -26,11 +26,6 @@ namespace ComplexChatRoom
         /// </summary>
         public string serverAddr;
 
-        /// <summary>
-        /// The server port number to attempt to connect with at the specified IP address
-        /// </summary>
-        public string serverPort;
-
         #endregion
 
         #region LoginDialog constructors
@@ -51,7 +46,6 @@ namespace ComplexChatRoom
         {
             name = txtUser.Text;
             serverAddr = txtServer.Text;
-            serverPort = txtPort.Text;
             DialogResult = DialogResult.OK;
         }
 

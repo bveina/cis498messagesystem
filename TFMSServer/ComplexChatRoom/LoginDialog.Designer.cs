@@ -34,7 +34,6 @@ namespace ComplexChatRoom
             this.txtUser = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.txtPort = new System.Windows.Forms.TextBox();
             this.txtServer = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -62,9 +61,9 @@ namespace ComplexChatRoom
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(85, 104);
+            this.button1.Location = new System.Drawing.Point(138, 76);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(105, 31);
             this.button1.TabIndex = 1;
             this.button1.Text = "Login";
             this.button1.UseVisualStyleBackColor = true;
@@ -72,22 +71,13 @@ namespace ComplexChatRoom
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.txtPort);
             this.groupBox2.Controls.Add(this.txtServer);
-            this.groupBox2.Location = new System.Drawing.Point(0, 49);
+            this.groupBox2.Location = new System.Drawing.Point(12, 61);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(252, 46);
+            this.groupBox2.Size = new System.Drawing.Size(120, 46);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Server and port";
-            // 
-            // txtPort
-            // 
-            this.txtPort.Location = new System.Drawing.Point(143, 20);
-            this.txtPort.Name = "txtPort";
-            this.txtPort.Size = new System.Drawing.Size(100, 20);
-            this.txtPort.TabIndex = 1;
-            this.txtPort.Text = TFMS_Constants.PORT_NUM.ToString();
+            this.groupBox2.Text = "Server IP";
             // 
             // txtServer
             // 
@@ -126,7 +116,6 @@ namespace ComplexChatRoom
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox txtUser;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TextBox txtPort;
         private System.Windows.Forms.TextBox txtServer;
     }
 }
