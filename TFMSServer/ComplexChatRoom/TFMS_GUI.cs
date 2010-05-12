@@ -164,19 +164,6 @@ namespace ComplexChatRoom
 
             this.Visible = true;
             this.WindowState = FormWindowState.Maximized;
-
-
-            #region THIS IS A HACK SO WE DON'T POST THE IMAGE ONLINE
-            try
-            {
-                drawingBox31.BackgroundImage = Image.FromFile("tfmsimage.jpg");
-                vectorBox1.BackgroundImage = Image.FromFile("tfmsimage.jpg");
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Image file not found!");
-            }
-            #endregion
         }
 
         /// <summary>this sends the current image to the server.</summary>
