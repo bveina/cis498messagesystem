@@ -117,16 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="drawingBox31.lines" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAEhEcmF3aW5nQm94LCBWZXJzaW9uPTEuMC4zNzQ3LjI3NTYxLCBD
-        dWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGwEAQAAAIIBU3lzdGVtLkNvbGxlY3Rpb25z
-        LkdlbmVyaWMuTGlzdGAxW1tEcmF3aW5nQm94LlBhdGhEYXRhLCBEcmF3aW5nQm94LCBWZXJzaW9uPTEu
-        MC4zNzQ3LjI3NTYxLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGxdXQMAAAAGX2l0
-        ZW1zBV9zaXplCF92ZXJzaW9uBAAAFURyYXdpbmdCb3guUGF0aERhdGFbXQIAAAAICAkDAAAAAAAAAAAA
-        AAAHAwAAAAABAAAAAAAAAAQTRHJhd2luZ0JveC5QYXRoRGF0YQIAAAAL
-</value>
-  </data>
+
   <metadata name="notifyIcon1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
