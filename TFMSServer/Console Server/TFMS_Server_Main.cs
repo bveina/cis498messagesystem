@@ -92,7 +92,7 @@ namespace Console_Server
             Console.WriteLine("{0} has sent a message", data.strName);
             
             // log the message in the SQL database
-            logMessage(data);
+            //logMessage(data);
         }
 
         /// <summary>
